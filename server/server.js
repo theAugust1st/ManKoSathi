@@ -1,7 +1,9 @@
 require('dotenv').config()
 const express = require('express')
 const connectDB = require('./config/db.js')
-const authRoutes = require('./routes/userAuth.js')
+const authRoutes = require('./routes/authRoutes.js')
+const userRoutes = require('./routes/userRoutes.js')
+const { notFound, errorHandler } = require('./middlewares/errorMiddleware.js')
 
 // connection to database
 connectDB()
@@ -11,10 +13,12 @@ app.use(express.json())
 app.get('/',(req,res)=>{
     res.send("MankoSathi is running....")
 })
-
 // Routes
 app.use('/api/auth',authRoutes)
-
+app.use('/api/user',userRoutes)
+// Error handling
+app.use(notFound)
+app.use(errorHandler)
 const PORT = process.env.PORT || 3000
 app.listen(PORT,()=>{
     console.log(`http://localhost:${PORT}`);
