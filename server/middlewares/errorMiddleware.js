@@ -20,6 +20,7 @@ const errorHandler = (err, req, res, next) => {
   }
   res.status(statusCode).json({
     message: err.message || "An unexpected server error occurred.",
+    success: false,
     stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
   });
 };

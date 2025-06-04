@@ -35,7 +35,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         email: newUser.email,
       },
       process.env.JWT_SECRET,
-      { expiresIn: "2h" }
+      { expiresIn: process.env.JWT_EXPIRY }
     );
     res.status(201).json({
       message: "User registered successfully",
@@ -56,39 +56,45 @@ const registerUser = asyncHandler(async (req, res, next) => {
   }
 });
 // login user controller
-const loginUser = asyncHandler(async (req, res,next) => {
+const loginUser = asyncHandler(async (req, res, next) => {
   // get the email or username and the password from req.body
   const { loginIdentifers, password } = req.body;
   // check all the credentials
-  if(!loginIdentifers || !password) return res.status(400).json({message:"Please provide email/username and password."})
+  if (!loginIdentifers || !password)
+    return res
+      .status(400)
+      .json({ message: "Please provide email/username and password." });
   // Find the user in the db using email or username
-  const user =await User.findOne({ $or: [{ email:loginIdentifers }, { username:loginIdentifers }] });
-  if (user && (await user.comparePassword(password))){
+  const user = await User.findOne({
+    $or: [{ email: loginIdentifers }, { username: loginIdentifers }],
+  });
+  if (user && (await user.comparePassword(password))) {
     const token = jwt.sign(
-      {id:user._id,
-        email : user.email
-      },process.env.JWT_SECRET, {
-        expiresIn: "2h"
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: process.env.JWT_EXPIRY,
       }
-    )
+    );
     res.status(200).json({
       message: "User login successfully",
       token,
-      user:{
-          _id: user._id,
+      user: {
+        _id: user._id,
         username: user.username,
         name: user.name,
         email: user.email,
         language_preference: user.language_preference,
         gender: user.gender,
         dob: user.dob,
-        favoriteQuotes : user.favoriteQuotes
-      }
-    })
-  }
-  else{
+        favoriteQuotes: user.favoriteQuotes,
+      },
+    });
+  } else {
     res.status(401);
-    throw new Error("Invalid credentials: Please check your email/username and password")
+    throw new Error(
+      "Invalid credentials: Please check your email/username and password"
+    );
   }
 });
 module.exports = {
