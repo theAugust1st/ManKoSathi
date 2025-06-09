@@ -3,6 +3,7 @@ const express = require('express')
 const connectDB = require('./config/db.js')
 const authRoutes = require('./routes/authRoutes.js')
 const userRoutes = require('./routes/userRoutes.js')
+const habitRoutes = require("./routes/habitRoutes.js")
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware.js')
 
 // connection to database
@@ -16,6 +17,9 @@ app.get('/',(req,res)=>{
 // Routes
 app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
+// Routes that handle the habit 
+app.use('/api/habits',habitRoutes)
+
 // Error handling
 app.use(notFound)
 app.use(errorHandler)
