@@ -74,9 +74,7 @@ const getHabits = asyncHandler(async (req, res) => {
 
 const getHabitById = asyncHandler(async (req, res) => {
   const habitId = req.params.id;
-
   const habit = await Habit.findById(habitId);
-
   if (!habit) {
     res.status(404);
     throw new Error("Habit not found with that ID.");
@@ -140,25 +138,25 @@ const updateHabit = asyncHandler(async (req, res) => {
 @access private/protected
 *****************************/
 
-  const deleteHabit = asyncHandler(async(req,res)=>{
-    const userId = req.user._id;
-    const habitId = req.params.id;
+const deleteHabit = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const habitId = req.params.id;
 
-    const habit = await Habit.findById(habitId);
-    if(!habit){
-      res.status(404)
-      throw new Error("Habit not found with that ID.")
-    }
-    if(!habit.userId.equals(userId)){
-      res.status(403)
-      throw new Error("User not authorized to delete this habit")
-    }
-    await habit.deleteOne()
-    res.status(200).json({
-      success:true,
-      message:"Habit deleted successfully"
-    })
-  })
+  const habit = await Habit.findById(habitId);
+  if (!habit) {
+    res.status(404);
+    throw new Error("Habit not found with that ID.");
+  }
+  if (!habit.userId.equals(userId)) {
+    res.status(403);
+    throw new Error("User not authorized to delete this habit");
+  }
+  await habit.deleteOne();
+  res.status(200).json({
+    success: true,
+    message: "Habit deleted successfully",
+  });
+});
 
 /****************************
 @desc delete the habit by id from the logged-in user.
@@ -166,22 +164,129 @@ const updateHabit = asyncHandler(async (req, res) => {
 @access private/protected
 *****************************/
 
-const deleteAllHabits = asyncHandler(async(req,res)=>{
+const deleteAllHabits = asyncHandler(async (req, res) => {
   const userId = req.user._id;
-  const habitsDeletion = await Habit.deleteMany({userId:userId})
-  if(habitsDeletion.deletedCount===0){
+  const habitsDeletion = await Habit.deleteMany({ userId: userId });
+  if (habitsDeletion.deletedCount === 0) {
     return res.status(200).json({
       success: true,
-      count : habitsDeletion.deletedCount,
-      message:"No habit found to delete."
-    })
+      count: habitsDeletion.deletedCount,
+      message: "No habit found to delete.",
+    });
   }
   res.status(200).json({
-    success:true,
-    count : habitsDeletion.deletedCount,
-    message:"All habits deleted successfully."
-  })
-})
+    success: true,
+    count: habitsDeletion.deletedCount,
+    message: "All habits deleted successfully.",
+  });
+});
+const habitCompletion = asyncHandler(async (req, res) => {
+  const userId = req.user._id;
+  const habitId = req.params.id;
+  const habit = await Habit.findById(habitId);
+  if (!habit) {
+    res.status(400);
+    throw new Error("Not found");
+  }
+  if (!habit.userId.equals(userId)) {
+    res.status(403);
+    throw new Error("User is not authorize to access details");
+  }
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Normalize today to midnight
+
+  const lastCompleted = habit.lastCompletedDate
+    ? new Date(habit.lastCompletedDate)
+    : null;
+  if (lastCompleted) lastCompleted.setHours(0, 0, 0, 0); // Normalize last date
+
+  // === DAILY HABIT ===
+  if (habit.frequency === "daily") {
+    // Check if already completed today
+    if (lastCompleted && lastCompleted.getTime() === today.getTime()) {
+      return res.status(200).json({
+        message: "Already completed today.",
+      });
+    }
+
+    // Check if completed yesterday
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+
+    if (lastCompleted && lastCompleted.getTime() === yesterday.getTime()) {
+      habit.currentStreak += 1;
+    } else {
+      habit.currentStreak = 1;
+    }
+  }
+
+  // === WEEKLY HABIT ===
+  else if (habit.frequency === "weekly") {
+    const getWeekNumber = (date) => {
+      const firstDay = new Date(date.getFullYear(), 0, 1);
+      const days = Math.floor((date - firstDay) / (1000 * 60 * 60 * 24));
+      return Math.ceil((days + firstDay.getDay() + 1) / 7);
+    };
+
+    const currentWeek = getWeekNumber(today);
+    const lastCompletedWeek = lastCompleted
+      ? getWeekNumber(lastCompleted)
+      : null;
+
+    if (
+      lastCompleted &&
+      currentWeek === lastCompletedWeek &&
+      lastCompleted.getFullYear() === today.getFullYear()
+    ) {
+      return res.status(200).json({
+        message: "Habit already completed this week.",
+      });
+    }
+    const previousWeek = new Date(today);
+    previousWeek.setDate(today.getDate() - 7);
+    const previousWeekNumber = getWeekNumber(previousWeek);
+    if(lastCompleted && previousWeekNumber === lastCompletedWeek && lastCompleted.getFullYear()===previousWeek.getFullYear()){
+    habit.currentStreak += 1;
+   }else{
+    habit.currentStreak = 1
+   }
+  }
+
+  // === MONTHLY HABIT ===
+  else if (habit.frequency === "monthly") {
+    if (
+      lastCompleted &&
+      lastCompleted.getMonth() === today.getMonth() &&
+      lastCompleted.getFullYear() === today.getFullYear()
+    ) {
+      return res.status(200).json({
+        message: "Already completed this month.",
+      });
+    }
+      const lastMonth = new Date(today.getFullYear(),today.getMonth()-1,1)
+      if(lastCompleted && lastCompleted.getMonth() === lastMonth.getMonth() && lastCompleted.getFullYear() === lastMonth.getFullYear()){
+        habit.currentStreak += 1;
+      }else{
+        habit.currentStreak = 1
+      }
+  }
+
+    habit.lastCompletedDate = new Date();
+    habit.longestStreak = Math.max(habit.currentStreak, habit.longestStreak);
+    await habit.save();
+
+    return res.status(200).json({
+      success: true,
+      message: `Successfully completed for this ${habit.frequency}`,
+      habit:habit
+    });
+});
 module.exports = {
   createHabit,
+  getHabits,
+  deleteAllHabits,
+  getHabitById,
+  updateHabit,
+  deleteHabit,
+  habitCompletion
 };

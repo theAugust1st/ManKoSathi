@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router();
-const {protect} = require('../middlewares/authMiddlerware')
+const {protect} = require('../middlewares/authMiddleware')
 
     router.route('/profile').get(protect,(req,res)=>{
         console.log(req.user)
