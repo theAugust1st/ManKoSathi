@@ -1,10 +1,9 @@
-const express = require('express')
+const express = require("express");
 const router = express.Router();
-const {protect} = require('../middlewares/authMiddleware')
+const { protect } = require("../middlewares/authMiddleware.js");
+const { addFavoriteQuote,getFavoriteQuotes,removeFavoriteQuote} = require("../controllers/userControllers.js");
+router.use(protect);
+router.route("/profile/favorites").post(addFavoriteQuote).get(getFavoriteQuotes);
+router.route("/profile/favorites/:quoteId").delete(removeFavoriteQuote)
 
-    router.route('/profile').get(protect,(req,res)=>{
-        console.log(req.user)
-        res.send("im check the authWork or not",req.body || "undefined")
-    })
-
-module.exports = router    
+module.exports = router;
