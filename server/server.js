@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes.js')
 const userRoutes = require('./routes/userRoutes.js')
 const habitRoutes = require("./routes/habitRoutes.js")
 const quoteRoutes = require("./routes/quoteRoutes.js")
+const feedSoundRoutes = require("./routes/feedSoundRoutes.js")
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware.js')
 
 // connection to database
@@ -22,6 +23,8 @@ app.use('/api/user',userRoutes)
 app.use('/api/habits',habitRoutes)
 //Routes that handle the quote
 app.use('/api/quotes',quoteRoutes)
+// Routes to feed the background music
+app.use('/api/background',feedSoundRoutes)
 // Error handling
 app.use(notFound)
 app.use(errorHandler)
