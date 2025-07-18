@@ -1,6 +1,10 @@
 const MeditationSession = require("../models/MeditationSession.js");
 const asyncHandler = require('../utils/asyncHandler.js');
-
+/*****************************
+@desc create the meditation session for the logged-in user
+@route POST /api/meditation
+@access private/proctected
+*****************************/
 const createMeditationSession = asyncHandler(async(req,res,next)=>{
     const userId = req.user._id;
     const {
@@ -40,5 +44,26 @@ const createMeditationSession = asyncHandler(async(req,res,next)=>{
         throw new Error("Invalid session data, Session not created.")
     }
 })
+/*****************************
+@desc get the user meditation sessions for the logged-in user
+@route GET /api/meditation
+@access private/proctected
+*****************************/
+const getMeditationSessions = asyncHandler(async(req,res,next)=>{
+    const userId = req.user._id;
 
-module.exports = {createMeditationSession}
+    const sessions = await MeditationSession.find({userId}).populate('backgroundSound');
+    res.status(200).json({
+        success:true,
+        count: sessions.length,
+        message:
+            sessions.length > 0 
+            ? "User meditation sessions retrieved successfully."
+            : "No meditation sessions found for this user.",
+            sessions:sessions
+    })
+})
+
+module.exports = {createMeditationSession,
+    getMeditationSessions
+}
