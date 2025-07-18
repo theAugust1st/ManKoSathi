@@ -1,34 +1,51 @@
 const mongoose = require("mongoose");
-
 const MeditationSessionSchema = new mongoose.Schema(
   {
+    userId:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:'User',
+      required:true
+    },
     sessionDate: {
       type: Date,
       required: true,
+      default:Date.now
     },
-    durationMinutes: {
+    durationSeconds: {
       type: Number,
-      require: true,
+      required: true,
     },
     sessionType: {
       type: String,
-      enum: ['guided', 'unguided'],
-      require: true,
+      enum: ['unguided'],
+      required: true,
     },
     meditationTechniques: {
       type: String,
-      enum: [
-        //research going on around the typoes of techniques.
-      ],
-      required: false
+      enum: ['mindfulness','breathing','body-scan','loving-kindness','mantra','walking','others','none'],
+      required: true
+    },
+    mood:{
+      preSession:{
+        type:String,
+        enum:['stressed','anxious','calm','neutral','happy','sad']
+      },
+      postSession:{
+        type:String,
+        enum:['stressed','anxious','calm','neutral','happy','sad']
+      }
+    },
+    goals:{
+      type:String,
+      enum:['reduce-stress','improve-focus','better-sleep','manage-anxiety','self-awareness','other']
+    },
+    backgroundSound:{
+      type : mongoose.Schema.Types.ObjectId,
+      ref:BackgroundSound
     },
     notes: {
       type: String,
-    },
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      trim:true
     },
   },
   { timestamps: true }
