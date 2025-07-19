@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const backgroundSoundSchema = mongoose.Schema({
+const backgroundSoundSchema = new mongoose.Schema({
     name:{
         type:String,
         trim:true,
@@ -19,4 +19,4 @@ const backgroundSoundSchema = mongoose.Schema({
 },{timestamps:true})
 
 const BackgroundSound = mongoose.model("BackgroundSound",backgroundSoundSchema);
-module.exports = BackgroundSound
+module.exports = BackgroundSound 
