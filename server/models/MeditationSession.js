@@ -8,12 +8,11 @@ const MeditationSessionSchema = new mongoose.Schema(
     },
     sessionDate: {
       type: Date,
-      required: true,
       default:Date.now
     },
     durationSeconds: {
       type: Number,
-      required: true,
+      default:300
     },
     sessionType: {
       type: String,
@@ -41,7 +40,7 @@ const MeditationSessionSchema = new mongoose.Schema(
     },
     backgroundSound:{
       type : mongoose.Schema.Types.ObjectId,
-      ref:BackgroundSound
+      ref:'BackgroundSound'
     },
     notes: {
       type: String,
