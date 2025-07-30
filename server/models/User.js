@@ -2,12 +2,6 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      unique: true,
-      required: true,
-      trim: true,
-    },
     name: {
       type: String,
       required: true,
@@ -30,12 +24,12 @@ const userSchema = new mongoose.Schema(
     language_preference: {
       type: String,
       enum: ["English", "Nepali"],
-      required: true,
+      required: false,
     },
     gender: {
       type: String,
       enum: ["Male", "Female", "Others","Prefer Not To Say"],
-      required: true,
+      required: false,
     },
     favoriteQuotes: [
       {
