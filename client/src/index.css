@@ -1,0 +1,7 @@
+@import "tailwindcss";
+
+/* In client/src/index.css */
+
+@theme{
+    --color-background: #E9F3F4;
+}
