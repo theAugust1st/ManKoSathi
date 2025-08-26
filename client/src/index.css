@@ -3,5 +3,33 @@
 /* In client/src/index.css */
 
 @theme{
-    --color-background: #E9F3F4;
+    --font-style: "Poppins";
+    --color-brand-50: oklch(97% 0.01 214); /* Light background */
+    --color-brand-100: oklch(91% 0.04 213);
+    --color-brand-200: oklch(85% 0.06 213);
+    --color-brand-300: oklch(79% 0.07 213);
+    --color-brand-400: oklch(74% 0.09 214);
+    --color-brand-500: oklch(68% 0.1 215); /* primary buttons */
+    --color-brand-600: oklch(58% 0.08 214); /* button hover */
+    --color-brand-700: oklch(49% 0.07 215);
+    --color-brand-800: oklch(38% 0.05 216);
+    --color-brand-900: oklch(28% 0.03 215); /* main text */
+    --color-brand-950: oklch(17% 0.01 214); /* headings */
+    
+    --background-image-auth-gradient: linear-gradient(
+    var(--color-brand-600),
+    var(--color-brand-950)
+  );
+}
+@layer base {
+    html {
+        font-family: var(--font-style), sans-serif;
+        -webkit-font-smoothing: antialiased; 
+        -moz-osx-font-smoothing: grayscale; /* Makes text look smoother on Mac */
+
+    }
+    body {
+        background-color: var(--color-brand-50);
+        color: var(--color-brand-900);
+  }
 }
