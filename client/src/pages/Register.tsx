@@ -3,6 +3,7 @@ import Button from "../components/ui/Button";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuth } from "../hooks/useAuth";
 
 const signUpSchema = z.object({
   name: z
@@ -19,6 +20,7 @@ const signUpSchema = z.object({
 type InputFields = z.infer<typeof signUpSchema>;
 
 function Register() {
+  const {login} = useAuth();
   const {
     register,
     reset,
@@ -41,7 +43,7 @@ function Register() {
     }
     else{
       console.log("registration Successful", result)
-      alert("Here will be welcome page")
+      login(result.user,result.token);
       reset()
     }
   }catch(err){

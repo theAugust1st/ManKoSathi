@@ -3,6 +3,9 @@ import Button from "../components/ui/Button"
 import { useForm, type SubmitHandler } from "react-hook-form"
 import z from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { useAuth } from "../hooks/useAuth"
 
 const loginSchema = z.object({
   email: z.string().email({ error: "Please enter a valid email" }),
@@ -10,8 +13,12 @@ const loginSchema = z.object({
 });
 type LoginInputFields = z.infer<typeof loginSchema>;
 function Login() {
+    const {login} = useAuth();
+    const navigate = useNavigate();
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const { register, reset, handleSubmit, formState: { errors }, } = useForm<LoginInputFields>({ resolver: zodResolver(loginSchema) });
     const onSubmit: SubmitHandler<LoginInputFields> = async(data) => {
+      setIsSubmitting(true);
       try{
       const response = await fetch('/api/auth/login',{
         method:"POST",
@@ -27,12 +34,17 @@ function Login() {
       }
       else{
         console.log("Login Successful", result)
-        alert("Here will be dashboard page")
-        reset()
+        const {user,token} = result
+        login(user,token);
+        navigate('/dashboard')
+        reset();
       }
     }catch(err){
       console.log("An error occured",err)
       alert("An error occured during login")
+    }
+    finally{
+      setIsSubmitting(false);
     }
     };
   return (
@@ -60,8 +72,7 @@ function Login() {
               ></Input>
               <Input id="password" label="Password" placeholder="Password" type="password" register={register} error={errors.password}>
               </Input>
-              <Button type="submit">Sign Up</Button>
-
+              <Button type="submit" disabled={isSubmitting}>{isSubmitting?"Logging in...":"Log In"}</Button>
           </form>
             <div className="center">
             <p className="text-base text-center text-slate-400">
