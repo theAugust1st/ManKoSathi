@@ -30,6 +30,9 @@ const habitSchema = new mongoose.Schema({
         type: Date,
         default: null
     }, 
+    completedLog:[{
+        date:{type:Date,required:true}
+    }],
     userId:{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
