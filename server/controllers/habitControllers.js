@@ -270,7 +270,7 @@ const habitCompletion = asyncHandler(async (req, res) => {
         habit.currentStreak = 1
       }
   }
-
+    habit.completedLog.push({date: new Date()})
     habit.lastCompletedDate = new Date();
     habit.longestStreak = Math.max(habit.currentStreak, habit.longestStreak);
     await habit.save();
