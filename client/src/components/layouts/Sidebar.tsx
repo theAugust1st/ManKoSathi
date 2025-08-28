@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo2.svg";
 import {
   PanelLeftClose,
@@ -7,18 +7,25 @@ import {
   LayoutDashboard,
   ListChecks,
   BookOpen,
-  Heart,
+  Wind,
   PanelLeftOpen,
 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
 function Sidebar() {
+  const {logout} = useAuth();
+  const navigate = useNavigate();
   const [isExpanded, setIsExpanded] = useState<boolean>(true);
   const navItems = [
     { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
     { to: "/habits", icon: ListChecks, label: "Habits" },
     { to: "/quotes", icon: BookOpen, label: "Quotes" },
-    { to: "/meditation", icon: Heart, label: "Meditations" },
+    { to: "/meditation", icon: Wind, label: "Meditations" },
   ];
+  function handleLogout(){
+    logout();
+    navigate('/login');
+  }
   return (
     <aside
       className={`border-r border-brand-200 flex flex-col h-screen transition-all duration-300 ease-in-out ${
@@ -76,7 +83,9 @@ function Sidebar() {
             {isExpanded ? "Bimal" : ""}
           </p>
         </div>
-        <button className="w-full flex items-center justify-center gap-2 p-3 bg-brand-100 rounded-md text-brand-900 font-semibold hover:bg-red-100 hover:text-red-700">
+        <button 
+        onClick={handleLogout}
+        className="w-full flex items-center justify-center gap-2 p-3 bg-brand-100 rounded-md text-brand-900 font-semibold hover:bg-red-100 hover:text-red-700">
           <LogOut size={16} />
           <span>{isExpanded ? "Logout" : ""}</span>
         </button>

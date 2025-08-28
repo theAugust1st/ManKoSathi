@@ -4,6 +4,8 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
+
 
 const signUpSchema = z.object({
   name: z
@@ -20,6 +22,7 @@ const signUpSchema = z.object({
 type InputFields = z.infer<typeof signUpSchema>;
 
 function Register() {
+  const navigate = useNavigate();
   const {login} = useAuth();
   const {
     register,
@@ -83,7 +86,7 @@ function Register() {
           </form>
           <div className="center">
             <p className="text-base text-center text-slate-400">
-              Alreay have ManKoSathi Account? <span className="underline underline-offset-2 cursor-pointer hover:text-blue-500">Login</span>
+              Alreay have ManKoSathi Account? <span onClick={()=>navigate('/login')} className="underline underline-offset-2 cursor-pointer hover:text-blue-500">Login</span>
             </p>
           </div>
         </div>

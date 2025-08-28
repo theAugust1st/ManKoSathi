@@ -76,7 +76,7 @@ function Login() {
           </form>
             <div className="center">
             <p className="text-base text-center text-slate-400">
-              New to our sidte? <span className="underline underline-offset-2 cursor-pointer hover:text-blue-500">SignUp</span>
+              New to our side? <span onClick={()=>navigate('/register')} className="underline underline-offset-2 cursor-pointer hover:text-blue-500">SignUp</span>
             </p>
           </div>
         </div>
