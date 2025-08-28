@@ -4,8 +4,20 @@ import MeditationWidget from '../components/dashboard/MeditationWidget';
 import { useState,useEffect } from 'react';
 import { getHabits } from '../services/habitServices';
 import { getRandomQuote } from '../services/quoteServices';
+import { getMeditationSessions } from '../services/meditation';
 export type CompletedLogEntry = {
   date:Date;
+}
+export type MeditationSessions= {
+  sessionDate:Date,
+  durationSeconds:number,
+  meditationTechniques:'mindfulness'|'breathing'|'body-scan'|'loving-kindness'|'mantra'|'walking'|'others'|'none'
+}
+export type MeditationSessionResponse = {
+  success:boolean,
+  count:number,
+  message:string,
+  sessions: MeditationSessions[]
 }
 export type Quote = {
   _id:string
@@ -36,35 +48,17 @@ export type QuoteResponse ={
   quote:Quote
 }
 
-type dashBoardData = {
-  habits: HabitResponse,
-  quotes: QuoteResponse
-}
 function DashBoard() {
-  const [data, setData] = useState<dashBoardData>({
-    habits: {
-      count: 0,
-      habits: [],
-      message: '',
-      success: false
-    },
-    quotes: {
-      success: false,
-      message: '',
-      quote: {
-        _id: '',
-        quoteText: '',
-        author: '',
-        category: ''
-      }
-    }
-  })
-  console.log(data)
+  const [habits,setHabits] = useState<Habit[]>([]);
+  const [quote, setQuote] = useState<Quote | null >(null)
+  const [meditations, setMeditations] = useState<MeditationSessions[]>([])
   useEffect(()=>{
     const fetchHabitData = async () => {
       try {
-        const [habits, quotes] = await Promise.all([getHabits(), getRandomQuote()])
-        setData({ habits, quotes })
+        const [habitsData, quoteData,meditationSessionsData] = await Promise.all([getHabits(), getRandomQuote(),getMeditationSessions()])
+        setHabits(habitsData.habits)
+        setQuote(quoteData.quote)
+        setMeditations(meditationSessionsData.sessions)
       } catch (err:any) {
         console.log(err)
       }
@@ -79,13 +73,13 @@ function DashBoard() {
         <p className="text-brand-800 mt-1">Ready to make today a great day?</p>
       </header>
       {/* for widgets */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quote of the day widget */}
-          <QuoteWidget quote = {data.quotes.quote}/>
+          <QuoteWidget quote = {quote}/>
         {/* Habits widgets */}
-        <HabitWidget habits={data.habits.habits}/>
+        <HabitWidget habits={habits}/>
         {/* Quote widgets */}
-        <MeditationWidget />
+        <MeditationWidget meditations={meditations}/>
       </div>
     </div>
   )

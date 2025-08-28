@@ -17,7 +17,7 @@ function HabitWidget({ habits }: HabitWidgetProps) {
   const lastSevenDays = getLast7Days();
 
   return (
-    <div className="lg:col-span-2 bg-white p-6 rounded-lg border border-brand-100">
+    <div className="lg:col-span-2 bg-white p-6 h-full rounded-lg border border-brand-100">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <ListChecks size={20} />
