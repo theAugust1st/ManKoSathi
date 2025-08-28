@@ -3,8 +3,16 @@ import HabitWidget from '../components/dashboard/HabitWidget';
 import MeditationWidget from '../components/dashboard/MeditationWidget';
 import { useState,useEffect } from 'react';
 import { getHabits } from '../services/habitServices';
+import { getRandomQuote } from '../services/quoteServices';
 export type CompletedLogEntry = {
   date:Date;
+}
+export type Quote = {
+  _id:string
+  quoteText:string,
+  author:string,
+  category: string
+  // 'motivation'|'wisdom'|'mindfulness'|'perseverance'|'calm'|'positivity'|'reflection'|'inspiration'|'self-awareness'
 }
 export type Habit = {
     _id:string,
@@ -16,14 +24,47 @@ export type Habit = {
     lastCompletedDate:Date,
     completedLog: CompletedLogEntry[]
 }
+export type HabitResponse ={
+  count:number,
+  habits: Habit[],
+  message:string,
+  success:boolean
+}
+export type QuoteResponse ={
+  success:false,
+  message:string,
+  quote:Quote
+}
+
+type dashBoardData = {
+  habits: HabitResponse,
+  quotes: QuoteResponse
+}
 function DashBoard() {
-  const [habits,setHabits] = useState<Habit[]>([])
-  console.log(habits)
+  const [data, setData] = useState<dashBoardData>({
+    habits: {
+      count: 0,
+      habits: [],
+      message: '',
+      success: false
+    },
+    quotes: {
+      success: false,
+      message: '',
+      quote: {
+        _id: '',
+        quoteText: '',
+        author: '',
+        category: ''
+      }
+    }
+  })
+  console.log(data)
   useEffect(()=>{
     const fetchHabitData = async () => {
       try {
-        const data = await getHabits();
-        setHabits(data.habits)
+        const [habits, quotes] = await Promise.all([getHabits(), getRandomQuote()])
+        setData({ habits, quotes })
       } catch (err:any) {
         console.log(err)
       }
@@ -40,9 +81,9 @@ function DashBoard() {
       {/* for widgets */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Quote of the day widget */}
-          <QuoteWidget />
+          <QuoteWidget quote = {data.quotes.quote}/>
         {/* Habits widgets */}
-        <HabitWidget habits={habits}/>
+        <HabitWidget habits={data.habits.habits}/>
         {/* Quote widgets */}
         <MeditationWidget />
       </div>
