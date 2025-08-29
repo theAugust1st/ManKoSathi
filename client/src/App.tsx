@@ -6,6 +6,7 @@ import Register from "./pages/Register"
 import { useAuth } from "./hooks/useAuth"
 import MainLayout from "./components/layouts/MainLayout"
 import MeditationPage from "./pages/MeditationPage"
+import { MeditationLayout } from "./components/layouts/MeditationLayout"
 function App() {
   const {isLoggedIn} = useAuth();
   return(
@@ -16,7 +17,9 @@ function App() {
         <Route element={<ProtectedRoute/>} >
         <Route element={<MainLayout/>}>
           <Route path="/dashboard" element={<DashBoard/>}></Route>
-          <Route path="/meditation" element={<MeditationPage/>}></Route>
+          <Route path="/meditation" element={<MeditationLayout/>}>
+            <Route index element={<MeditationPage/>}></Route>
+          </Route>
         </Route>
         </Route>
         <Route path="/" element={isLoggedIn?<Navigate to="/dashboard"/>:<h1>Welcome to the ManKoSathi!</h1>}></Route>

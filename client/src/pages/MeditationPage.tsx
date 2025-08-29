@@ -3,6 +3,7 @@ import { Wind, Plus, Trash2 } from 'lucide-react';
 import { useState,useEffect } from 'react';
 import { getMeditationSessions } from '../services/meditation';
 import type { MeditationSessions } from './DashBoard';
+import LogMeditation from '../components/meditation/LogMeditation';
 
 // --- Mock (Static) Data ---
 // We will use this to build the UI. Later, this will come from your API.
@@ -38,7 +39,8 @@ const formatDate = (dateString: string) => {
 
 
 function MeditationPage() {
-
+const [isModelOpen,setIsModelOpen] = useState<boolean>(false)
+console.log(isModelOpen)
 const [sessions, setSessions] = useState<MeditationSessions[]>([]);
   useEffect(()=>{
     const historySession = async()=>{
@@ -53,16 +55,15 @@ const [sessions, setSessions] = useState<MeditationSessions[]>([]);
     }
     historySession();
   },[])
-
   return (
     <div className="space-y-6">
       {/* 1. Header and Action Button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-3xl md:text-4xl font-bold text-brand-950 flex items-center gap-3">
+        <h1 className="text-3xl md:text-4xl fonft-bold text-brand-950 flex items-center gap-3">
           <Wind size={32} />
           Meditation History
         </h1>
-        <button className="w-full sm:w-auto bg-brand-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors">
+        <button onClick={()=>setIsModelOpen(true)} className="w-full sm:w-auto bg-brand-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors">
           <Plus size={20} />
           Log New Session
         </button>
@@ -99,6 +100,7 @@ const [sessions, setSessions] = useState<MeditationSessions[]>([]);
           </div>
         )}
       </div>
+      {isModelOpen && (<LogMeditation/>)}
     </div>
   );
 }
