@@ -57,7 +57,7 @@ function Sidebar() {
           {navItems.map((item) => (
             <li key={item.label}>
               <NavLink
-                to={item.label}
+                to={item.to}
                 className={({ isActive }) =>
                   `flex items-center gap-3 p-3 rounded-lg transition-colors text-brand-900 font-medium ${
                     isActive
