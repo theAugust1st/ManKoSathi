@@ -1,4 +1,8 @@
-export const meditationGuides = {
+type MeditationGuide = {
+  title: string;
+  steps: string[];
+};
+export const meditationGuides: Record<string, MeditationGuide> = {
   mindfulness: {
     title: "Mindfulness Meditation",
     steps: [
@@ -65,7 +69,7 @@ export const meditationGuides = {
         "Your focus is not on getting anywhere, but on the simple act of walking.",
     ],
   },
-  default: {
+  others: {
     title: "Meditation Practice",
     steps: [
         "Find a comfortable position.",

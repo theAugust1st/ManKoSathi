@@ -1,16 +1,17 @@
 // File: client/src/contexts/MeditationContext.tsx
 
 import  { createContext,  useState, type ReactNode } from 'react';
+import type { BackgroundSound } from '../components/meditation/BackgroundSounds';
 
 // 1. Define the shape of the data we need to store
 export interface MeditationSettings {
-  durationSeconds: string;
+  durationSeconds: string | number;
   meditationTechnique: string;
   mood: {
     preSession: string;
   };
   goals: string;
-  backgroundSound: string;
+  backgroundSound: BackgroundSound;
 }
 
 // 2. Define the shape of our context

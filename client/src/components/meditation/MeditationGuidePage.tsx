@@ -5,19 +5,23 @@ import { ArrowLeft } from 'lucide-react';
 // 1. Import our new "dictionary" of guides
 import { meditationGuides } from '../../../src/data/meditationGuides';
 import { useNavigate } from 'react-router-dom';
+import { useMeditation } from '../../hooks/useMeditation';
 
 // --- The Main MeditationGuidePage Component ---
 
 function MeditationGuidePage() {
+  const {settings} = useMeditation();
+  console.log("meditationContext:",settings);
   // In a real app, this would come from the previous page
   // For now, we will use a sample. Try changing it to 'breathing'!
   const navigate = useNavigate();
   const [isSessionStarted, setIsSessionStarted] = useState(false);
-  const selectedTechnique = 'mindfulness'; 
 
   // 2. Look up the correct guide in our dictionary
-  const guide = meditationGuides[selectedTechnique] || meditationGuides.default;
-  function handleChange(){
+const technique = settings?.meditationTechnique || "default";
+const guide = meditationGuides[technique];
+
+   function handleChange(){
     setIsSessionStarted(true);
     navigate('/meditation/live');
   }

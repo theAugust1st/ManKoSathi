@@ -35,13 +35,14 @@ export default function MeditationSessionSetup() {
     []
   ); // fectched from the server
   const [soundPlayingId, setSoundPlayingId] = useState<string | null>(null);
-  const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
+  // const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
+    const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
 
   const techniques = [
     { id: "mindfulness", label: "Mindfulness", icon: Heart, selected: false },
     { id: "breathing", label: "Breathing", icon: Heart, selected: false },
-    { id: "bodyscan", label: "Body Scan", icon: Scan, selected: false },
-    { id: "loving", label: "Loving Kindness", icon: Heart, selected: false },
+    { id: "body-scan", label: "Body Scan", icon: Scan, selected: false },
+    { id: "loving-kindness", label: "Loving Kindness", icon: Heart, selected: false },
     { id: "mantra", label: "Mantra", icon: Music, selected: false },
     { id: "walking", label: "Walking", icon: User, selected: false },
     { id: "others", label: "Others", icon: MoreHorizontal, selected: false },
@@ -79,14 +80,7 @@ export default function MeditationSessionSetup() {
     };
     fetchBackgroundSounds();
   }, []);
-  // const sounds = [
-  //   "Sound-1",
-  //   "Sound-1",
-  //   "Sound-1",
-  //   "Sound-1",
-  //   "Sound-1",
-  //   "Sound-1",
-  // ];
+  const selectedBackgroundSound = backgroundSounds.find(sound=>sound._id===selectedSound);
   function handleSessionStart() {
     // Logic to start the meditation session
     console.log("Meditation session started with:");
@@ -104,7 +98,11 @@ export default function MeditationSessionSetup() {
         preSession: selectedMood,
       },
       goals: selectedGoal,
-      backgroundSound: selectedSound,
+      backgroundSound: {
+        _id:selectedBackgroundSound?._id||'',
+        name:selectedBackgroundSound?.name||'',
+        audioUrl:selectedBackgroundSound?.audioUrl||''
+      }
     });
     navigate("/meditation/guide");
   }
