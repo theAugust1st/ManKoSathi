@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Clock,
   Heart,
@@ -6,9 +6,8 @@ import {
   Music,
   User,
   MoreHorizontal,
-  Play,
   ChevronDown,
-  ArrowLeft
+  ArrowLeft,
 } from "lucide-react";
 import Button from "../ui/Button";
 import { useMeditation } from "../../hooks/useMeditation";
@@ -21,8 +20,8 @@ export type BackgroundSound = {
   audioUrl: string;
 };
 export default function MeditationSessionSetup() {
-      const navigate = useNavigate();
-    const {setSessionSettings} = useMeditation();
+  const navigate = useNavigate();
+  const { setSessionSettings } = useMeditation();
   const [selectedDuration, setSelectedDuration] = useState("10m");
   const [selectedTechnique, setSelectedTechnique] = useState("");
   const [selectedMood, setSelectedMood] = useState("");
@@ -32,9 +31,11 @@ export default function MeditationSessionSetup() {
   const [showCustom, setShowCustom] = useState(false);
   const [notes, setNotes] = useState("");
   const [isGuideOpen, setIsGuideOpen] = useState(false);
-  const [backgroundSounds,setBackgroundSounds] = useState<BackgroundSound[]>([]);
+  const [backgroundSounds, setBackgroundSounds] = useState<BackgroundSound[]>(
+    []
+  ); // fectched from the server
+  const [soundPlayingId, setSoundPlayingId] = useState<string | null>(null);
   const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
-
 
   const techniques = [
     { id: "mindfulness", label: "Mindfulness", icon: Heart, selected: false },
@@ -51,7 +52,7 @@ export default function MeditationSessionSetup() {
     { id: "anxious", label: "Anxious", emoji: "😰" },
     { id: "calm", label: "Calm", emoji: "😊" },
     { id: "neutral", label: "Neutral", emoji: "😐" },
-    { id: "happy", label: "Happy", emoji: "😊" }, 
+    { id: "happy", label: "Happy", emoji: "😊" },
     { id: "sad", label: "sad", emoji: "😢" },
   ];
 
@@ -63,18 +64,21 @@ export default function MeditationSessionSetup() {
     { id: "awareness", label: "Self-awareness", icon: User },
     { id: "other", label: "Other", icon: User },
   ];
-  useEffect(()=>{
-    const fetchBackgroundSounds = async()=>{
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  useEffect(() => {
+    const fetchBackgroundSounds = async () => {
       try {
         const data = await getBackgroundSounds();
-        console.log(data,"Fetched the background sounds successfully.");
+        console.log(data, "Fetched the background sounds successfully.");
         setBackgroundSounds(data.sounds);
+        console.log(data.sounds)
       } catch (error) {
-        console.log(error,"Failed to fetch the background sounds.");
-        alert("Error: Not able to fetch the background sounds for now.")
+        console.log(error, "Failed to fetch the background sounds.");
+        alert("Error: Not able to fetch the background sounds for now.");
       }
-  }
-  fetchBackgroundSounds()},[])
+    };
+    fetchBackgroundSounds();
+  }, []);
   // const sounds = [
   //   "Sound-1",
   //   "Sound-1",
@@ -84,7 +88,6 @@ export default function MeditationSessionSetup() {
   //   "Sound-1",
   // ];
   function handleSessionStart() {
-
     // Logic to start the meditation session
     console.log("Meditation session started with:");
     console.log("Duration:", showCustom ? customDuration : selectedDuration);
@@ -94,22 +97,45 @@ export default function MeditationSessionSetup() {
     console.log("Sound:", selectedSound);
     console.log("Notes:", notes);
     setIsGuideOpen(true);
-    setSessionSettings(
-        {durationSeconds: showCustom ? customDuration : selectedDuration,
-        meditationTechnique:selectedTechnique,
-        mood:{
-            preSession:selectedMood
-        },
-        goals:selectedGoal,
-        backgroundSound:selectedSound
-    })
-    navigate('/meditation/guide');
-  } 
+    setSessionSettings({
+      durationSeconds: showCustom ? customDuration : selectedDuration,
+      meditationTechnique: selectedTechnique,
+      mood: {
+        preSession: selectedMood,
+      },
+      goals: selectedGoal,
+      backgroundSound: selectedSound,
+    });
+    navigate("/meditation/guide");
+  }
   const canStartSession = selectedTechnique && selectedMood && selectedGoal;
-
+  function handleBackgoundSound(sound: BackgroundSound) {
+    if (audioRef.current && soundPlayingId === sound._id) {
+      audioRef.current.pause();
+      setSoundPlayingId(null);
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      audioRef.current = new Audio(sound.audioUrl);
+      audioRef.current.loop = true;
+      audioRef.current.play();
+      setSoundPlayingId(sound._id);
+    }
+  }
+  function handleSelectedSound(soundId: string) {
+    setSelectedSound(soundId);
+  }
   return (
     <div className="max-w-4xl p-6 bg-white min-h-screen">
-      <div><button onClick={()=>(navigate(-1))} className="hover:bg-brand-400 rounded-sm hover:text-white"><ArrowLeft size={20}/></button></div>
+      <div>
+        <button
+          onClick={() => navigate(-1)}
+          className="hover:bg-brand-400 rounded-sm hover:text-white"
+        >
+          <ArrowLeft size={20} />
+        </button>
+      </div>
       <div className="rounded-2xl p-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -245,7 +271,13 @@ export default function MeditationSessionSetup() {
         </div>
 
         {/* Background Sound Section */}
-        <BackgroundSounds backgroundSounds={backgroundSounds} selectedSound={selectedSound} setSelectedSound={setSelectedSound}/> 
+        <BackgroundSounds
+          backgroundSounds={backgroundSounds}
+          selectedSound={selectedSound}
+          setSelectedSound={handleSelectedSound}
+          soundPlayingId={soundPlayingId}
+          onPlayingSound={handleBackgoundSound}
+        />
 
         {/* Notes Section */}
         <div className="mb-4">
@@ -259,21 +291,19 @@ export default function MeditationSessionSetup() {
             className="w-full p-4 bg-blue-50 border border-blue-200 rounded-xl focus:outline-none focus:border-teal-500 resize-none h-24"
           />
         </div>
-
-        {/* Start Session Button */}
-        {/* <button
-          onClick={handleSessionStart}
-          disabled={!canStartSession}
-          className={`w-full py-4 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors ${
-            canStartSession
-              ? "bg-brand-500 text-white hover:bg-brand-600"
-              : "bg-brand-300 text-gray-500 cursor-not-allowed"
-          }`}
-        >
-          <Play className="w-5 h-5" />
-          Start Session
-        </button> */}
-        {canStartSession ?<Button onClick={handleSessionStart} type={"button"} className="w-full">Start Session</Button>: <Button disabled type={"button"} className="w-full">Start Session</Button>}
+        {canStartSession ? (
+          <Button
+            onClick={handleSessionStart}
+            type={"button"}
+            className="w-full"
+          >
+            Start Session
+          </Button>
+        ) : (
+          <Button disabled type={"button"} className="w-full">
+            Start Session
+          </Button>
+        )}
 
         {!canStartSession && (
           <p className="text-center text-gray-500 text-sm mt-2">
