@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Clock,
   Heart,
@@ -8,12 +8,20 @@ import {
   MoreHorizontal,
   Play,
   ChevronDown,
+  ArrowLeft
 } from "lucide-react";
-import MeditationGuidePage from "./MeditationGuidePage";
 import Button from "../ui/Button";
 import { useMeditation } from "../../hooks/useMeditation";
-
+import { useNavigate } from "react-router-dom";
+import { getBackgroundSounds } from "../../services/soundServices";
+import BackgroundSounds from "./BackgroundSounds";
+export type BackgroundSound = {
+  _id: string;
+  name: string;
+  audioUrl: string;
+};
 export default function MeditationSessionSetup() {
+      const navigate = useNavigate();
     const {setSessionSettings} = useMeditation();
   const [selectedDuration, setSelectedDuration] = useState("10m");
   const [selectedTechnique, setSelectedTechnique] = useState("");
@@ -24,14 +32,12 @@ export default function MeditationSessionSetup() {
   const [showCustom, setShowCustom] = useState(false);
   const [notes, setNotes] = useState("");
   const [isGuideOpen, setIsGuideOpen] = useState(false);
-
+  const [backgroundSounds,setBackgroundSounds] = useState<BackgroundSound[]>([]);
   const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
-// const durations = [5, 10, 15, 20, 30, 45, 60];
-  
 
 
   const techniques = [
-    { id: "mindfulness", label: "Mindfulness", icon: Heart, selected: true },
+    { id: "mindfulness", label: "Mindfulness", icon: Heart, selected: false },
     { id: "breathing", label: "Breathing", icon: Heart, selected: false },
     { id: "bodyscan", label: "Body Scan", icon: Scan, selected: false },
     { id: "loving", label: "Loving Kindness", icon: Heart, selected: false },
@@ -57,16 +63,28 @@ export default function MeditationSessionSetup() {
     { id: "awareness", label: "Self-awareness", icon: User },
     { id: "other", label: "Other", icon: User },
   ];
-
-  const sounds = [
-    "Sound-1",
-    "Sound-1",
-    "Sound-1",
-    "Sound-1",
-    "Sound-1",
-    "Sound-1",
-  ];
+  useEffect(()=>{
+    const fetchBackgroundSounds = async()=>{
+      try {
+        const data = await getBackgroundSounds();
+        console.log(data,"Fetched the background sounds successfully.");
+        setBackgroundSounds(data.sounds);
+      } catch (error) {
+        console.log(error,"Failed to fetch the background sounds.");
+        alert("Error: Not able to fetch the background sounds for now.")
+      }
+  }
+  fetchBackgroundSounds()},[])
+  // const sounds = [
+  //   "Sound-1",
+  //   "Sound-1",
+  //   "Sound-1",
+  //   "Sound-1",
+  //   "Sound-1",
+  //   "Sound-1",
+  // ];
   function handleSessionStart() {
+
     // Logic to start the meditation session
     console.log("Meditation session started with:");
     console.log("Duration:", showCustom ? customDuration : selectedDuration);
@@ -85,11 +103,13 @@ export default function MeditationSessionSetup() {
         goals:selectedGoal,
         backgroundSound:selectedSound
     })
+    navigate('/meditation/guide');
   } 
   const canStartSession = selectedTechnique && selectedMood && selectedGoal;
 
   return (
     <div className="max-w-4xl p-6 bg-white min-h-screen">
+      <div><button onClick={()=>(navigate(-1))} className="hover:bg-brand-400 rounded-sm hover:text-white"><ArrowLeft size={20}/></button></div>
       <div className="rounded-2xl p-8">
         {/* Header */}
         <div className="text-center mb-8">
@@ -225,30 +245,7 @@ export default function MeditationSessionSetup() {
         </div>
 
         {/* Background Sound Section */}
-        <div className="mb-4">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
-            Background Sound
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {sounds.map((sound, index) => (
-              <button
-                key={index}
-                onClick={() => setSelectedSound(`sound-${index}`)}
-                className={`p-4 rounded-xl border transition-colors flex items-center justify-between ${
-                  selectedSound === `sound-${index}`
-                    ? "bg-brand-500 text-white border-brand-500"
-                    : "bg-white text-gray-700 border-brand-300 hover:border-brand-400"
-                }`}
-              >
-                <div className="flex flex-col items-start">
-                  <span className="font-medium">{sound}</span>
-                  <span className="text-sm opacity-75">----</span>
-                </div>
-                <Play className="w-5 h-5" />
-              </button>
-            ))}
-          </div>
-        </div>
+        <BackgroundSounds backgroundSounds={backgroundSounds} selectedSound={selectedSound} setSelectedSound={setSelectedSound}/> 
 
         {/* Notes Section */}
         <div className="mb-4">
@@ -284,7 +281,6 @@ export default function MeditationSessionSetup() {
           </p>
         )}
       </div>
-        {isGuideOpen && (<MeditationGuidePage/>)}
     </div>
   );
 }

@@ -7,6 +7,9 @@ import { useAuth } from "./hooks/useAuth"
 import MainLayout from "./components/layouts/MainLayout"
 import MeditationPage from "./pages/MeditationPage"
 import { MeditationLayout } from "./components/layouts/MeditationLayout"
+import MeditationGuidePage from "./components/meditation/MeditationGuidePage"
+import LiveSessionPage from "./components/meditation/LiveSessionPage"
+import MeditationSessionSetup from "./components/meditation/MeditationSessionSetup"
 function App() {
   const {isLoggedIn} = useAuth();
   return(
@@ -19,6 +22,9 @@ function App() {
           <Route path="/dashboard" element={<DashBoard/>}></Route>
           <Route path="/meditation" element={<MeditationLayout/>}>
             <Route index element={<MeditationPage/>}></Route>
+            <Route path="/meditation/setup" element={<MeditationSessionSetup/>}></Route>
+            <Route path="/meditation/guide" element={<MeditationGuidePage/>}></Route>
+            <Route path="/meditation/live" element={<LiveSessionPage/>}></Route>
           </Route>
         </Route>
         </Route>

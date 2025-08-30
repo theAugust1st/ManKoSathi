@@ -4,7 +4,7 @@ import MeditationWidget from '../components/dashboard/MeditationWidget';
 import { useState,useEffect } from 'react';
 import { getHabits } from '../services/habitServices';
 import { getRandomQuote } from '../services/quoteServices';
-import { getMeditationSessions } from '../services/meditation';
+import { getMeditationSessions } from '../services/meditationServices';
 export type CompletedLogEntry = {
   date:Date;
 }

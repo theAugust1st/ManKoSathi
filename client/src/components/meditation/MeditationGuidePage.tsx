@@ -1,15 +1,17 @@
 // File: client/src/pages/MeditationGuidePage.tsx
 import { useState } from 'react';
 import Button from '../ui/Button';
+import { ArrowLeft } from 'lucide-react';
 // 1. Import our new "dictionary" of guides
 import { meditationGuides } from '../../../src/data/meditationGuides';
-import LiveSessionPage from './LiveMeditation';
+import { useNavigate } from 'react-router-dom';
 
 // --- The Main MeditationGuidePage Component ---
 
 function MeditationGuidePage() {
   // In a real app, this would come from the previous page
   // For now, we will use a sample. Try changing it to 'breathing'!
+  const navigate = useNavigate();
   const [isSessionStarted, setIsSessionStarted] = useState(false);
   const selectedTechnique = 'mindfulness'; 
 
@@ -17,11 +19,13 @@ function MeditationGuidePage() {
   const guide = meditationGuides[selectedTechnique] || meditationGuides.default;
   function handleChange(){
     setIsSessionStarted(true);
+    navigate('/meditation/live');
   }
   return (
     <div className="min-h-screen bg-brand-50 flex justify-center items-center p-4">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-8 border border-brand-100">
-        
+        <div><button onClick={()=>(navigate(-1))} className="hover:bg-brand-400 rounded-sm hover:text-white"><ArrowLeft size={20}/></button></div>
+      <div className="rounded-2xl p-8"></div>
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-brand-950">
@@ -55,7 +59,6 @@ function MeditationGuidePage() {
         </div>
 
       </div>
-      {isSessionStarted && <LiveSessionPage /> }
     </div>
   );
 }
