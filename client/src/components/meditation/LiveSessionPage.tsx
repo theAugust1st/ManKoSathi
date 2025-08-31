@@ -1,4 +1,4 @@
-import { Play, Pause, RotateCcw, Music, Volume2, VolumeX, Check } from 'lucide-react';
+import { Play, Pause, RotateCcw, Volume2, VolumeX, Check } from 'lucide-react';
 import { useMeditation } from '../../hooks/useMeditation';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,13 +6,10 @@ import { useNavigate } from 'react-router-dom';
 function parseDuration(duration: string | number | undefined): number {
   if (!duration) return 0;
   if (typeof duration === 'number') return duration;
-
   const match = duration.match(/^(\d+)([ms]?)$/);
   if (!match) return 0;
-
   const value = Number(match[1]);
   const unit = match[2];
-
   if (unit === 'm') return value * 60;
   return value;
 }
@@ -24,12 +21,12 @@ const formatTime = (seconds: number) => {
 };
 
 function LiveSessionPage() {
-  const navigatie = useNavigate();
-  const { settings } = useMeditation();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const navigatie = useNavigate();
+  const { settings } = useMeditation();
 
   const totalDuration = parseDuration(settings?.durationSeconds);
 
@@ -85,8 +82,7 @@ function LiveSessionPage() {
     setElapsedSeconds(totalDuration);
     setIsPlaying(false);
     audioRef.current?.pause();
-    navigatie('/meditation')
-    console.log('Meditation Completed!');
+    navigatie('/meditation/summary');
   };
 
   const progressPercentage = totalDuration
@@ -96,7 +92,7 @@ function LiveSessionPage() {
   return (
     <div className="min-h-screen bg-brand-50 flex justify-center items-center p-4">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-3xl p-8 sm:p-12 border border-brand-100 flex flex-col items-center">
-        {/* Timer */}
+
         <div className="text-6xl sm:text-7xl font-light text-brand-900 tracking-wider mb-4">
           {formatTime(totalDuration - elapsedSeconds)}
         </div>
@@ -150,11 +146,6 @@ function LiveSessionPage() {
           >
             <Check size={24} />
           </button>
-
-          {/* Background Music */}
-          {/* <button className="p-3 bg-brand-100 text-brand-700 rounded-full hover:bg-brand-200 transition-colors">
-            <Music size={24} />
-          </button> */}
         </div>
 
         {/* Background Sound Info */}

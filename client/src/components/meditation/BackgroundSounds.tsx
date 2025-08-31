@@ -27,7 +27,6 @@ function BackgroundSounds({
         {backgroundSounds.map((sound, index) => {
             const isSoundPlaying = selectedSound === sound._id;
             const isPlayingSound = soundPlayingId === sound._id;
-            console.log(isSoundPlaying,"isSoundPlaying")
             return(
           <button
             key={index}

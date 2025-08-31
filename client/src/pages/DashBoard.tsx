@@ -12,7 +12,7 @@ export type MeditationSessions= {
   _id:string
   sessionDate:string,
   durationSeconds:number,
-  meditationTechniques:'mindfulness'|'breathing'|'body-scan'|'loving-kindness'|'mantra'|'walking'|'others'|'none'
+  meditationTechnique:'mindfulness'|'breathing'|'body-scan'|'loving-kindness'|'mantra'|'walking'|'others'|'none'
 }
 export type MeditationSessionResponse = {
   success:boolean,

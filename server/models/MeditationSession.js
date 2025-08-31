@@ -19,7 +19,7 @@ const MeditationSessionSchema = new mongoose.Schema(
       enum: ['unguided'],
       required: true,
     },
-    meditationTechniques: {
+    meditationTechnique: {
       type: String,
       enum: ['mindfulness','breathing','body-scan','loving-kindness','mantra','walking','others','none'],
       required: true

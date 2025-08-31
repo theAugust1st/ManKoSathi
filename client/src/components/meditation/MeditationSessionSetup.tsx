@@ -30,19 +30,23 @@ export default function MeditationSessionSetup() {
   const [customDuration, setCustomDuration] = useState("");
   const [showCustom, setShowCustom] = useState(false);
   const [notes, setNotes] = useState("");
-  const [isGuideOpen, setIsGuideOpen] = useState(false);
   const [backgroundSounds, setBackgroundSounds] = useState<BackgroundSound[]>(
     []
-  ); // fectched from the server
+  );
   const [soundPlayingId, setSoundPlayingId] = useState<string | null>(null);
-  // const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
-    const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
+
+  const durations = ["5m", "10m", "15m", "20m", "30m", "45m", "60m"];
 
   const techniques = [
     { id: "mindfulness", label: "Mindfulness", icon: Heart, selected: false },
     { id: "breathing", label: "Breathing", icon: Heart, selected: false },
     { id: "body-scan", label: "Body Scan", icon: Scan, selected: false },
-    { id: "loving-kindness", label: "Loving Kindness", icon: Heart, selected: false },
+    {
+      id: "loving-kindness",
+      label: "Loving Kindness",
+      icon: Heart,
+      selected: false,
+    },
     { id: "mantra", label: "Mantra", icon: Music, selected: false },
     { id: "walking", label: "Walking", icon: User, selected: false },
     { id: "others", label: "Others", icon: MoreHorizontal, selected: false },
@@ -58,51 +62,47 @@ export default function MeditationSessionSetup() {
   ];
 
   const goals = [
-    { id: "anxiety", label: "Manage Anxiety", icon: Heart, selected: true },
-    { id: "stress", label: "Reduce Stress", icon: Heart },
-    { id: "sleep", label: "Better Sleep", icon: Clock },
-    { id: "focus", label: "Improve Focus", icon: Heart },
-    { id: "awareness", label: "Self-awareness", icon: User },
+    {
+      id: "manage-anxiety",
+      label: "Manage Anxiety",
+      icon: Heart,
+      selected: true,
+    },
+    { id: "reduce-stress", label: "Reduce Stress", icon: Heart },
+    { id: "better-sleep", label: "Better Sleep", icon: Clock },
+    { id: "improve-focus", label: "Improve Focus", icon: Heart },
+    { id: "self-awareness", label: "Self-awareness", icon: User },
     { id: "other", label: "Other", icon: User },
   ];
-  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   useEffect(() => {
     const fetchBackgroundSounds = async () => {
       try {
         const data = await getBackgroundSounds();
-        console.log(data, "Fetched the background sounds successfully.");
         setBackgroundSounds(data.sounds);
-        console.log(data.sounds)
       } catch (error) {
-        console.log(error, "Failed to fetch the background sounds.");
         alert("Error: Not able to fetch the background sounds for now.");
       }
     };
     fetchBackgroundSounds();
   }, []);
-  const selectedBackgroundSound = backgroundSounds.find(sound=>sound._id===selectedSound);
+  const selectedBackgroundSound = backgroundSounds.find(
+    (sound) => sound._id === selectedSound
+  );
   function handleSessionStart() {
-    // Logic to start the meditation session
-    console.log("Meditation session started with:");
-    console.log("Duration:", showCustom ? customDuration : selectedDuration);
-    console.log("Technique:", selectedTechnique);
-    console.log("Mood:", selectedMood);
-    console.log("Goal:", selectedGoal);
-    console.log("Sound:", selectedSound);
-    console.log("Notes:", notes);
-    setIsGuideOpen(true);
     setSessionSettings({
       durationSeconds: showCustom ? customDuration : selectedDuration,
       meditationTechnique: selectedTechnique,
       mood: {
         preSession: selectedMood,
+        postSession: "",
       },
       goals: selectedGoal,
       backgroundSound: {
-        _id:selectedBackgroundSound?._id||'',
-        name:selectedBackgroundSound?.name||'',
-        audioUrl:selectedBackgroundSound?.audioUrl||''
-      }
+        _id: selectedBackgroundSound?._id || "",
+        name: selectedBackgroundSound?.name || "",
+        audioUrl: selectedBackgroundSound?.audioUrl || "",
+      },
     });
     navigate("/meditation/guide");
   }
