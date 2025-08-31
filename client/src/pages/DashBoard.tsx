@@ -4,14 +4,15 @@ import MeditationWidget from '../components/dashboard/MeditationWidget';
 import { useState,useEffect } from 'react';
 import { getHabits } from '../services/habitServices';
 import { getRandomQuote } from '../services/quoteServices';
-import { getMeditationSessions } from '../services/meditation';
+import { getMeditationSessions } from '../services/meditationServices';
 export type CompletedLogEntry = {
   date:Date;
 }
 export type MeditationSessions= {
-  sessionDate:Date,
+  _id:string
+  sessionDate:string,
   durationSeconds:number,
-  meditationTechniques:'mindfulness'|'breathing'|'body-scan'|'loving-kindness'|'mantra'|'walking'|'others'|'none'
+  meditationTechnique:'mindfulness'|'breathing'|'body-scan'|'loving-kindness'|'mantra'|'walking'|'others'|'none'
 }
 export type MeditationSessionResponse = {
   success:boolean,
@@ -53,7 +54,7 @@ function DashBoard() {
   const [quote, setQuote] = useState<Quote | null >(null)
   const [meditations, setMeditations] = useState<MeditationSessions[]>([])
   useEffect(()=>{
-    const fetchHabitData = async () => {
+    const fetchDashBoardData = async () => {
       try {
         const [habitsData, quoteData,meditationSessionsData] = await Promise.all([getHabits(), getRandomQuote(),getMeditationSessions()])
         setHabits(habitsData.habits)
@@ -63,7 +64,7 @@ function DashBoard() {
         console.log(err)
       }
     }
-    fetchHabitData();
+    fetchDashBoardData();
   },[])
   return (
     <div className="space-y-8">
@@ -72,7 +73,7 @@ function DashBoard() {
         <h1 className="text-3xl md:text-4xl font-bold text-brand-950">Good Morning,<span className="text-brand-500">UserName</span></h1>
         <p className="text-brand-800 mt-1">Ready to make today a great day?</p>
       </header>
-      {/* for widgets */}
+      {/* for widgets */} 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Quote of the day widget */}
           <QuoteWidget quote = {quote}/>

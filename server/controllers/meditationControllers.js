@@ -12,22 +12,22 @@ const createMeditationSession = asyncHandler(async(req,res,next)=>{
         sessionDate,
         durationSeconds,
         sessionType,
-        meditationTechniques,
+        meditationTechnique,
         mood,
         goals,
         backgroundSound,
         notes
     } = req.body;
-    if(!meditationTechniques){
+    if(!meditationTechnique){
         res.status(400)
-        throw new Error("Must select the Meditation Techniques.")
+        throw new Error("Must select the Meditation Technique.")
     }
     const newMeditationSession = await MeditationSession.create({
         userId,
         sessionDate,
         durationSeconds,
         sessionType:"unguided",
-        meditationTechniques,
+        meditationTechnique,
         mood,
         goals,
         backgroundSound,
