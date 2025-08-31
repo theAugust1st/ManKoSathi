@@ -45,3 +45,21 @@ export const createMeditationSession = async (sessionData: NewSessionData) => {
   }
   return response.json();
 };
+
+export const deleteMeditationSession = async (sessionId: string) => {
+  const token = getToken();
+  if (!token) throw new Error('You are not logged in.');
+
+  const response = await fetch(`/api/meditation/${sessionId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to delete session.');
+  }
+  return response.json();
+}

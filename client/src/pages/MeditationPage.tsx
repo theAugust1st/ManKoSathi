@@ -1,33 +1,8 @@
 import { Wind, Plus, Trash2 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { getMeditationSessions } from "../services/meditationServices";
+import { getMeditationSessions,deleteMeditationSession } from "../services/meditationServices";
 import type { MeditationSessions } from "./DashBoard";
 import { useNavigate } from "react-router-dom";
-
-// --- Mock (Static) Data ---
-// We will use this to build the UI. Later, this will come from your API.
-// const mockMeditationSessions = [
-//   {
-//     _id: 'm1',
-//     sessionDate: '2025-08-28T10:00:00Z',
-//     durationSeconds: 600, // 10 minutes
-//     meditationTechnique: 'mindfulness',
-//   },
-//   {
-//     _id: 'm2',
-//     sessionDate: '2025-08-27T09:30:00Z',
-//     durationSeconds: 300, // 5 minutes
-//     meditationTechnique: 'breathing',
-//   },
-//   {
-//     _id: 'm3',
-//     sessionDate: '2025-08-25T21:00:00Z',
-//     durationSeconds: 900, // 15 minutes
-//     meditationTechnique: 'body-scan',
-//   },
-// ];
-
-// A small helper to format the date nicely
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
@@ -37,16 +12,13 @@ const formatDate = (dateString: string) => {
 };
 
 function MeditationPage() {
-  const [isModelOpen, setIsModelOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  console.log(isModelOpen);
   const [sessions, setSessions] = useState<MeditationSessions[]>([]);
   useEffect(() => {
     const historySession = async () => {
       try {
         const data = await getMeditationSessions();
         setSessions(data.sessions);
-        console.log(data.sessions);
       } catch (error) {
         alert("Error: Not able to get the previous logs for now.");
         console.log(error, "Failed to retrived the meditation logs.");
@@ -58,22 +30,30 @@ function MeditationPage() {
     if (seconds < 60) {
       return `${seconds} second${seconds !== 1 ? "s" : ""}`;
     }
-
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-
     if (remainingSeconds === 0) {
       return `${minutes} minute${minutes !== 1 ? "s" : ""}`;
     }
-
     return `${minutes} minute${
       minutes !== 1 ? "s" : ""
     } ${remainingSeconds} second${remainingSeconds !== 1 ? "s" : ""}`;
   }
 
   function handleChange() {
-    setIsModelOpen(true);
     navigate("/meditation/setup");
+  }
+  async function handleDeleteSession(sessionId: string) {
+    if(!window.confirm("Are you sure you want to delete this session? This action cannot be undone.")){
+      return;
+    }
+    try {
+      await deleteMeditationSession(sessionId);
+      setSessions((prev)=>prev.filter(session=>session._id !== sessionId));
+    } catch (error) {
+      alert("Error: Unable to delete the session. Please try again later.");
+      console.error("Failed to delete the session.", error);
+    }
   }
   return (
     <div className="space-y-6">
@@ -110,7 +90,7 @@ function MeditationPage() {
                     {formatDate(session.sessionDate)}
                   </p>
                 </div>
-                <button className="p-2 text-brand-600 hover:text-red-500 hover:bg-red-100 rounded-full transition-colors">
+                <button onClick={()=>handleDeleteSession(session._id)} className="p-2 text-brand-600 hover:text-red-500 hover:bg-red-100 rounded-full transition-colors">
                   <Trash2 size={18} />
                 </button>
               </li>
