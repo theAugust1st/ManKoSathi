@@ -32,15 +32,18 @@ const HabitYearGrid = ({ completedDates = [] }:HabitYearGridProps) => {
 
   // Generate days
   const days = [];
-  for (let d = new Date(startDate); d <= today; d.setDate(d.getDate() + 1)) {
-    const dateStr = d.toISOString().split("T")[0];
-    days.push({
-      date: dateStr,
-      day: d.getDay(), // 0=Sunday
-      completed: completed.has(dateStr),
-      isToday: dateStr === today.toISOString().split("T")[0],
-    });
-  }
+for (let d = new Date(startDate); d <= today; d.setDate(d.getDate() + 1)) {
+  const current = new Date(d); // clone the date here
+  const dateStr = current.toISOString().split("T")[0];
+
+  days.push({
+    date: dateStr,
+    day: current.getDay(),
+    completed: completed.has(dateStr),
+    isToday: dateStr === today.toISOString().split("T")[0],
+  });
+}
+
 
   // Arrange by weeks (columns)
   const weeks = [];

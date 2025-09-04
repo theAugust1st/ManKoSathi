@@ -1,9 +1,13 @@
 import {ListChecks, Plus} from "lucide-react";
 import Habit from "../components/habit/Habit.tsx";
 import { useHabit } from "../hooks/useHabit"
+import { useState } from "react";
+import Modal from "../components/ui/Modal.tsx";
+import HabitFormModal from "../components/habit/HabitFormModal.tsx";
 
 function HabitPage() {
     const {isHabits} = useHabit();
+    const [isModalOpen,setIsModalOpen] = useState<boolean>(false)
   return (
         <div className="space-y-4">
       {/* 1. Header and Action Button */}
@@ -12,7 +16,7 @@ function HabitPage() {
           <ListChecks size={32} />
           Habits
         </h1>
-        <button
+        <button onClick={()=>setIsModalOpen(true)}
           className="w-full sm:w-auto bg-brand-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors"
         >
           <Plus size={20} />
@@ -20,8 +24,11 @@ function HabitPage() {
         </button>
       </div>
       {isHabits.map((habit)=>
-        <Habit key={habit._id} name={habit.habitName} description = {habit.description} completedDates={habit.completedLog} streak={habit.currentStreak} longestStreak={habit.longestStreak}/>
+        <Habit key={habit._id} name={habit.habitName} description = {habit.description} completedDates={habit.completedLog} streak={habit.currentStreak} longestStreak={habit.longestStreak} id={habit._id} lastCompletedDate={habit.lastCompletedDate}/>
       )}
+      <Modal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)}>
+        <HabitFormModal type="create" onClose={()=>setIsModalOpen(false)}></HabitFormModal>
+      </Modal>
       </div>
   )
 }

@@ -11,7 +11,7 @@ export type Habit = {
 };
 type HabitContextType = {
   isHabits: Habit[];
-  setIsHabits: (habits: Habit[]) => void;
+  setIsHabits:React.Dispatch<React.SetStateAction<Habit[]>> ;
 };
 export const HabitContext = createContext<HabitContextType | undefined>(undefined
 );

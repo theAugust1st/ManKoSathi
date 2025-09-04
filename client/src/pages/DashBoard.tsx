@@ -35,7 +35,7 @@ export type Habit = {
     frequency: 'daily' | 'weekly',
     currentStreak:number,
     longestStreak:number,
-    lastCompletedDate:Date,
+    lastCompletedDate:string,
     completedLog: CompletedLogEntry[]
 }
 export type HabitResponse ={
