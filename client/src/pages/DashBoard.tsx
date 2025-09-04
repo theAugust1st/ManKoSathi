@@ -5,6 +5,7 @@ import { useState,useEffect } from 'react';
 import { getHabits } from '../services/habitServices';
 import { getRandomQuote } from '../services/quoteServices';
 import { getMeditationSessions } from '../services/meditationServices';
+import { useHabit } from '../hooks/useHabit';
 export type CompletedLogEntry = {
   date:Date;
 }
@@ -53,6 +54,7 @@ function DashBoard() {
   const [habits,setHabits] = useState<Habit[]>([]);
   const [quote, setQuote] = useState<Quote | null >(null)
   const [meditations, setMeditations] = useState<MeditationSessions[]>([])
+  const {setIsHabits} = useHabit();
   useEffect(()=>{
     const fetchDashBoardData = async () => {
       try {
@@ -60,6 +62,7 @@ function DashBoard() {
         setHabits(habitsData.habits)
         setQuote(quoteData.quote)
         setMeditations(meditationSessionsData.sessions)
+        setIsHabits(habitsData.habits)
       } catch (err:any) {
         console.log(err)
       }
