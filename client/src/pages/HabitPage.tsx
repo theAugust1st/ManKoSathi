@@ -16,7 +16,7 @@ function HabitPage() {
           <ListChecks size={32} />
           Habits
         </h1>
-        <button onClick={()=>setIsModalOpen(true)}
+        <button onClick={(e)=>{e.stopPropagation();setIsModalOpen(true)}}
           className="w-full sm:w-auto bg-brand-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors"
         >
           <Plus size={20} />

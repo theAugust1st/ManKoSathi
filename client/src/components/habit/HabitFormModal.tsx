@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createHabit, updateHabit } from "../../services/habitServices";
+import { useHabit } from "../../hooks/useHabit";
 
 type HabitFormModalProps = {
   type: 'create' | 'edit';
@@ -12,13 +13,14 @@ export default function HabitFormModal({ onClose, onSuccess,type ,id}: HabitForm
   const [habitName, setHabitName] = useState('');
   const [frequency, setFrequency] = useState<'daily' | 'weekly'>('daily');
   const [description, setDescription] = useState('')
-
+  const {setIsHabits} = useHabit();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if(type === 'create'){
       const res = await createHabit({ habitName:habitName, frequency:frequency,description });
-      console.log(res);
+      console.log("create:",res);
+      setIsHabits((prev)=>[res.habit,...prev])
       onSuccess?.(); // optional callback to update habit list
       onClose();     // close the modal after success
       }
@@ -27,7 +29,9 @@ export default function HabitFormModal({ onClose, onSuccess,type ,id}: HabitForm
           throw new Error("No habit ID provided.")
         }
         const res = await updateHabit(id,{habitName,frequency,description});
-        console.log("edit",res)
+        setIsHabits((prev)=>
+          prev.map((h)=>(h._id === id ? res.habit : h))
+        )
         onSuccess?.();
         onClose();
       }

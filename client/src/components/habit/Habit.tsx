@@ -35,7 +35,6 @@ function Habit({
     try {
       const response = await completeHabit(id);
       console.log(response);
-
       setIsHabits((prev: Habit[]) =>
         prev.map((h) => (h._id === id ? response.habit : h))
       );
@@ -47,8 +46,10 @@ function Habit({
   const handleDelete = async (e:React.MouseEvent<HTMLButtonElement>,id:string) => {
     e.stopPropagation();
     try {
-      const res = await deleteHabit(id);
-      console.log(res)
+      const confirmed = window.confirm("Are you sure you want to delete this habit?");
+      if (!confirmed) return;
+      await deleteHabit(id);
+      setIsHabits((prev: Habit[]) => prev.filter((h) => h._id !== id));
     } catch (error){
       console.log("Failed to delete now");
     }
@@ -61,7 +62,7 @@ function Habit({
 
   return (
     <div
-      onClick={() => setIsModalOpen(true)}
+      onClick={(e) => {setIsModalOpen(true)}}
       className="w-fit bg-white p-2 rounded-lg shadow space-y-4"
     >
       {/* Header */}
@@ -73,11 +74,11 @@ function Habit({
           )}
         </div>
         <div className="flex gap-4">
-        <button onClick={(e)=>handleDelete(e,id)}className="p-2 text-brand-600 hover:text-red-500 hover:bg-red-100 rounded-xl transition-colors">
+        <button onClick={(e)=>{handleDelete(e,id)}}className="p-2 text-brand-600 hover:text-red-500 hover:bg-red-100 rounded-xl transition-colors">
           <Trash2 size={24} />
         </button>
         <button
-          onClick={() => handleCompleteHabit(id)}
+          onClick={(e) => {e.stopPropagation();handleCompleteHabit(id)}}
           disabled={isCompletedToday}
           className={`p-2 rounded-xl transition-colors border ${
             isCompletedToday

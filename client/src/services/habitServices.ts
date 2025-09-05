@@ -35,6 +35,7 @@ export const createHabit = async ({habitName:habitName,frequency:frequency,descr
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to save new habit for now.')
     }
+    return response.json();
 }
 export const updateHabit = async (habitID:string,{habitName,frequency,description}:{habitName:string,frequency:'daily'| 'weekly',description:string})=>{
     const token = getToken()
