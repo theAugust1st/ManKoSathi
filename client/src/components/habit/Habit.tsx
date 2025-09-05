@@ -62,7 +62,7 @@ function Habit({
 
   return (
     <div
-      onClick={(e) => {setIsModalOpen(true)}}
+      onClick={() => {setIsModalOpen(true)}}
       className="w-fit bg-white p-2 rounded-lg shadow space-y-4"
     >
       {/* Header */}

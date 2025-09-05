@@ -13,6 +13,7 @@ import MeditationSessionSetup from "./components/meditation/MeditationSessionSet
 import MeditationPostSession from "./components/meditation/MeditationPostSession";
 import HabitLayout from "./components/layouts/HabitLayout";
 import HabitPage from "./pages/HabitPage";
+import QuotesPage from "./pages/QuotesPage";
 function App() {
   const { isLoggedIn } = useAuth();
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/habits" element={<HabitLayout />}>
               <Route index element={<HabitPage/>} />
             </Route>
+            <Route path="/quotes" element={<QuotesPage/>}></Route>
           </Route>
         </Route>
         <Route
