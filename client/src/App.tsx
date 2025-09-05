@@ -11,6 +11,8 @@ import MeditationGuidePage from "./components/meditation/MeditationGuidePage";
 import LiveSessionPage from "./components/meditation/LiveSessionPage";
 import MeditationSessionSetup from "./components/meditation/MeditationSessionSetup";
 import MeditationPostSession from "./components/meditation/MeditationPostSession";
+import HabitLayout from "./components/layouts/HabitLayout";
+import HabitPage from "./pages/HabitPage";
 function App() {
   const { isLoggedIn } = useAuth();
   return (
@@ -34,6 +36,9 @@ function App() {
               <Route path="guide" element={<MeditationGuidePage />} />
               <Route path="live" element={<LiveSessionPage />} />
               <Route path="summary" element={<MeditationPostSession />} />
+            </Route>
+            <Route path="/habits" element={<HabitLayout />}>
+              <Route index element={<HabitPage/>} />
             </Route>
           </Route>
         </Route>
