@@ -3,9 +3,9 @@ import { createContext, useEffect,useState, type ReactNode } from "react";
     _id: string;
     name: string;
     email: string;
-    language_preference: string;
+    language_preference?: "English" | "Nepali";
     dob?: string;
-    gender?: string
+    gender?: "Male" | "Female" | "Others" | "Prefer Not To Say";
 }
 type AuthContextType = {
     user: User | null;

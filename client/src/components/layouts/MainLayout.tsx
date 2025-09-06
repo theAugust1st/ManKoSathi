@@ -2,15 +2,17 @@ import { useAuth } from "../../hooks/useAuth"
 import OnBoardingModal from "../profile/OnBoardingModal";
 import Sidebar  from "./Sidebar"
 import { Outlet } from "react-router-dom"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function MainLayout() {
   const [isModelOpen, setIsModelOpen] = useState(false)
   const {user} = useAuth();
   const onBoardingModalNeeded = user && (!user.dob || !user.gender)
-  if(onBoardingModalNeeded && !isModelOpen){
-    setIsModelOpen(true);
-  }
+  useEffect(()=>{
+    if(onBoardingModalNeeded){
+      setIsModelOpen(true);
+    }
+  },[onBoardingModalNeeded])
   return (
     <div className="flex min-h-screen">
         <Sidebar/>
