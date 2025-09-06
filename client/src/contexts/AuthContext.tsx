@@ -1,12 +1,15 @@
 import { createContext, useEffect,useState, type ReactNode } from "react";
-    type User = {
+    export type User = {
     _id: string;
     name: string;
     email: string;
     language_preference: string;
+    dob?: string;
+    gender?: string
 }
 type AuthContextType = {
     user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
     token : string | null;
     isLoggedIn: boolean;
     login: (user: User, token: string) => void;
@@ -42,7 +45,7 @@ export const AuthProvider = ({children}:{children:ReactNode})=>{
     }
     const isLoggedIn = !!token;
     const value = {
-        user,
+        user,setUser,
         token,
         isLoggedIn,
         login,
