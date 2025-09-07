@@ -15,6 +15,7 @@ import HabitLayout from "./components/layouts/HabitLayout";
 import HabitPage from "./pages/HabitPage";
 import QuotesPage from "./pages/QuotesPage";
 import UserPage from "./pages/UserPage";
+
 function App() {
   const { isLoggedIn } = useAuth();
   return (
@@ -61,4 +62,6 @@ function App() {
   );
 }
 
+
 export default App;
+
