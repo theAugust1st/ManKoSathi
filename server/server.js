@@ -4,6 +4,7 @@ const cors = require('cors')
 const connectDB = require('./config/db.js')
 const authRoutes = require('./routes/authRoutes.js')
 const userRoutes = require('./routes/userRoutes.js')
+const profileRoutes = require('./routes/profileRoutes.js')
 const habitRoutes = require("./routes/habitRoutes.js")
 const quoteRoutes = require("./routes/quoteRoutes.js")
 const meditationRoutes = require("./routes/meditationRoutes.js")
@@ -23,6 +24,7 @@ app.get('/',(req,res)=>{
 app.use('/api/auth',authRoutes)
 app.use('/api/user',userRoutes)
 // Routes that handle the habit 
+app.use('/api/user',profileRoutes)
 app.use('/api/habits',habitRoutes)
 //Routes that handle the quote
 app.use('/api/quotes',quoteRoutes)

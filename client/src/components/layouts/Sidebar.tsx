@@ -57,7 +57,7 @@ function Sidebar() {
           {navItems.map((item) => (
             <li key={item.label}>
               <NavLink
-                to={item.label}
+                to={item.to}
                 className={({ isActive }) =>
                   `flex items-center gap-3 p-3 rounded-lg transition-colors text-brand-900 font-medium ${
                     isActive
@@ -76,20 +76,23 @@ function Sidebar() {
         </ul>
       </nav>
       {/* logout/profile section */}
+      <NavLink to="/profile" className="mt-auto">
       <div className="p-2 border-t border-brand-100">
         <div className={`flex items-center gap-3 mb-4 ${isExpanded?'justify-start':'justify-center'}`}>
           <UserCircle size={36} className="text-brand-700" />
           <p className="text-brand-950 font-semibold">
             {isExpanded ? "Bimal" : ""}
           </p>
+          </div>
         </div>
+      </NavLink>
         <button 
         onClick={handleLogout}
         className="w-full flex items-center justify-center gap-2 p-3 bg-brand-100 rounded-md text-brand-900 font-semibold hover:bg-red-100 hover:text-red-700">
           <LogOut size={16} />
           <span>{isExpanded ? "Logout" : ""}</span>
         </button>
-      </div>
+      
     </aside>
   );
 }
