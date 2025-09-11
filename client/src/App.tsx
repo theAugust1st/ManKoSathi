@@ -15,6 +15,7 @@ import HabitLayout from "./components/layouts/HabitLayout";
 import HabitPage from "./pages/HabitPage";
 import QuotesPage from "./pages/QuotesPage";
 import UserPage from "./pages/UserPage";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -53,7 +54,7 @@ function App() {
             isLoggedIn ? (
               <Navigate to="/dashboard" />
             ) : (
-              <h1>Welcome to the ManKoSathi!</h1>
+              <LandingPage/>
             )
           }
         ></Route>
