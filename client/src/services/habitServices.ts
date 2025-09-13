@@ -1,14 +1,22 @@
 const getToken = ()=> localStorage.getItem("token");
+type GetHabitOptions = {
+        sortBy?:string,
+        order?:string
+    }
+export const getHabits= async (options:GetHabitOptions = {})=>{
+    
 
-export const getHabits= async ()=>{
     const token = getToken();
     if(!token){
         throw new Error("No authentication token found.");
     }
-    const response = await fetch('/api/habits',{
+    let url = '/api/habits'
+    if(options.sortBy){
+        url += `?sortBy=${options.sortBy}&order=${options.order|| 'asc'}`
+    }
+    const response = await fetch(url,{
         method:'GET',
         headers:{
-            'Context-Type':'application/Type',
             'Authorization':`Bearer ${token}`
         }
     })
