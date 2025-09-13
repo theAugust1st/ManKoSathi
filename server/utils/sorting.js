@@ -6,7 +6,7 @@ const getValue = (item, sortBy) =>{
     if(value instanceof Date){
         return value.getTime();
     }
-    return item[sortBy]
+    return value
 }
 const swap = (arr,a,b) =>[arr[a],arr[b]] = [arr[b],arr[a]]; 
 
@@ -24,7 +24,7 @@ function partition(arr, start, end,sortBy) {
     let s = start + 1;
     let e = end;
 
-    while (s<e) {
+    while (s<=e) {
         while (s <= end && getValue(arr[s],sortBy)<= pivot) {
             s++;
         }
@@ -41,9 +41,9 @@ function partition(arr, start, end,sortBy) {
 }
 
 function sortArray(feature, sortBy, order = "asc") {
-
-    const sorted = quickSort(feature.slice(), 0, feature.length - 1,sortBy);
-    if(!sortBy){
+    const finalSortBy = sortBy|| 'createdAt';
+    const sorted = quickSort(feature.slice(), 0, feature.length - 1,finalSortBy);
+    if(finalSortBy === 'createdAt'){
         return sorted.reverse();
     }
     return order === 'asc' ? sorted : sorted.reverse();

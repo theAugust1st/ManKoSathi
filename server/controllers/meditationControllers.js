@@ -1,6 +1,7 @@
 const MeditationSession = require("../models/MeditationSession.js");
 const BackgroundSound = require('../models/backgroundSound.js')
 const asyncHandler = require('../utils/asyncHandler.js');
+const sortArray = require("../utils/sorting.js");
 /*****************************
 @desc create the meditation session for the logged-in user
 @route POST /api/meditation
@@ -52,8 +53,9 @@ const createMeditationSession = asyncHandler(async(req,res,next)=>{
 *****************************/
 const getMeditationSessions = asyncHandler(async(req,res,next)=>{
     const userId = req.user._id;
-
-    const sessions = await MeditationSession.find({userId}).populate('backgroundSound');
+    const {sortBy, order} = req.query ;
+    let sessions = await MeditationSession.find({userId}).populate('backgroundSound');
+    sessions = sortArray(sessions,sortBy,order)
     res.status(200).json({
         success:true,
         count: sessions.length,

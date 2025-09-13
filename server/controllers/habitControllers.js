@@ -1,5 +1,6 @@
 const asyncHandler = require("../utils/asyncHandler");
 const Habit = require("../models/Habit");
+const sortArray = require('../utils/sorting')
 
 /*****************************
 @desc create the habits for the logged-in user
@@ -51,10 +52,11 @@ const createHabit = asyncHandler(async (req, res) => {
 @access private/protected
 *****************************/
 const getHabits = asyncHandler(async (req, res) => {
+  const {sortBy,order} = req.query;
   const userId = req.user._id;
 
-  const habits = await Habit.find({ userId });
-
+  let habits = await Habit.find({ userId }).lean();
+  habits = sortArray(habits,sortBy,order)
   res.status(200).json({
     success: true,
     count: habits.length,
@@ -180,6 +182,12 @@ const deleteAllHabits = asyncHandler(async (req, res) => {
     message: "All habits deleted successfully.",
   });
 });
+
+/****************************
+@desc delete the habit by id from the logged-in user.
+@route PUT  /api/habits/:id/complete
+@access private/protected
+*****************************/
 const habitCompletion = asyncHandler(async (req, res) => {
   const userId = req.user._id;
   const habitId = req.params.id;
