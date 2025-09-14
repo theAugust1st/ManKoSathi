@@ -12,38 +12,39 @@ const sortOptions = [
     label: "Created At",
     icon: Calendar,
     description: "Sort by creation date",
+    order:"desc"
   },
   {
     value: "habitName",
     label: "Name",
     icon: User,
     description: "Sort alphabetically",
+    order:"asc"
   },
   {
     value: "currentStreak",
     label: "Streak",
     icon: Zap,
     description: "Streak count",
+    order:'desc'
   },
   {
     value: "longestStreak",
     label: "Longest streak",
     icon: Trophy,
     description: "Best streak achieved",
+    order:"desc"
   },
 ];
 function HabitPage() {
   const { isHabits, setIsHabits } = useHabit();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [sortBy, setSortBy] = useState<string>("createdAt");
+  const [sortBy, setSortBy] = useState<string>(sortOptions[0].value);
+  const [order, setOrder] = useState<string>(sortOptions[0].order)
   useEffect(()=>{
     const fetchHabits = async ()=>{
       try {
         console.log("Calling habit befre fetch",sortBy)
-        let order = 'asc'
-        if(sortBy === 'longestStreak' || sortBy=== 'currentStreak'){
-           order = 'desc'
-        }
       const habit = await getHabits({sortBy,order});
       setIsHabits(habit.habits)
       } catch (error) {
@@ -51,7 +52,7 @@ function HabitPage() {
       }
         }
         fetchHabits()
-  },[sortBy])
+  },[sortBy,order])
   return (
     <div className="space-y-4">
       {/* 1. Header and Action Button */}
@@ -65,6 +66,8 @@ function HabitPage() {
             options={sortOptions}
             value={sortBy}
             onChange={setSortBy}
+            order={order}
+            onChangeOrder={setOrder}
           ></DropdownMenu>
           <button
             onClick={(e) => {
