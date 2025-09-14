@@ -1,8 +1,9 @@
-import { Wind, Plus, Trash2 } from "lucide-react";
+import { Wind, Plus, Trash2, Calendar , Trophy , ChevronFirst } from "lucide-react";
 import { useState, useEffect } from "react";
 import { getMeditationSessions,deleteMeditationSession } from "../services/meditationServices";
 import type { MeditationSessions } from "./DashBoard";
 import { useNavigate } from "react-router-dom";
+import DropdownMenu from "../components/ui/DropdownMenu";
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
@@ -10,14 +11,39 @@ const formatDate = (dateString: string) => {
     day: "numeric",
   });
 };
+const sortOptions = [
+  {
+    value: "createdAt",
+    label: "recently added",
+    icon: Calendar,
+    description:"Sort by creation date",
+    order:"asc"
+  },
+    {
+    value: "durationSeconds",
+    label: "Longest duration",
+    icon:Trophy,
+    description:"longest to shortest duration",
+    order:"desc"
+  },
+    {
+    value: "durationSeconds",
+    label: "Shortest",
+    icon:ChevronFirst,
+    description:"shortest to longest duration",
+    order:'asc'
+  }
 
+]
 function MeditationPage() {
   const navigate = useNavigate();
   const [sessions, setSessions] = useState<MeditationSessions[]>([]);
+  const [sortBy, setSortBy] = useState<string>(sortOptions[0].value);
+  const [order, setOrder ] = useState<string>(sortOptions[0].order)
   useEffect(() => {
     const historySession = async () => {
       try {
-        const data = await getMeditationSessions();
+        const data = await getMeditationSessions({sortBy,order});
         setSessions(data.sessions);
       } catch (error) {
         alert("Error: Not able to get the previous logs for now.");
@@ -25,7 +51,7 @@ function MeditationPage() {
       }
     };
     historySession();
-  }, []);
+  }, [sortBy,order]);
   function formatDuration(seconds: number): string {
     if (seconds < 60) {
       return `${seconds} second${seconds !== 1 ? "s" : ""}`;
@@ -63,6 +89,8 @@ function MeditationPage() {
           <Wind size={32} />
           Meditation History
         </h1>
+        <div className="flex items-center gap-2">
+          <DropdownMenu options={sortOptions} value={sortBy} onChange={setSortBy} order={order} onChangeOrder={setOrder}/>
         <button
           onClick={handleChange}
           className="w-full sm:w-auto bg-brand-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors"
@@ -70,6 +98,7 @@ function MeditationPage() {
           <Plus size={20} />
           Log New Session
         </button>
+        </div>
       </div>
 
       {/* 2. History List */}
