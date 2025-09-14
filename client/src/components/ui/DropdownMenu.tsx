@@ -4,12 +4,15 @@ export type SortOptions = {
     value: string,
     label: string,
     icon: LucideIcon,
-    description: string
+    description: string,
+    order:string
 }
 type DropdownMenuProps ={
     options: SortOptions[],
     value: string,
     onChange: (value: string)=>void,
+    order:string,
+    onChangeOrder : (o:string) =>void
 }
 function useClickOutside(ref:React.RefObject<HTMLDivElement | null>,callback:()=>void){
     useEffect(()=>{
@@ -24,17 +27,16 @@ function useClickOutside(ref:React.RefObject<HTMLDivElement | null>,callback:()=
         }
     },[ref,callback])
 }
-function DropdownMenu({options,value,onChange}:DropdownMenuProps) {
+function DropdownMenu({options,value,onChange,order,onChangeOrder}:DropdownMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null)
   useClickOutside(dropdownRef,()=>setIsOpen(false))
   const selectedOptionData = options.find(
-  (option) => option.value === value
+  (option) => (option.value === value && option.order === order)
 );
-  function handleChange(value:string){
-    if(value === selectedOptionData?.value)
-        setIsOpen(false)
-    onChange(value)
+  function handleChange(newValue:string,newOrder:string){
+    onChange(newValue)
+    onChangeOrder(newOrder)
     setIsOpen(false)
 }
   return (
@@ -58,7 +60,7 @@ function DropdownMenu({options,value,onChange}:DropdownMenuProps) {
           {options.map((option) => (
             <button 
             key={option.value}
-            onClick={()=>handleChange(option.value)}
+            onClick={()=>handleChange(option.value,option.order)}
             className="w-full flex items-center gap-3 p-2 hover:bg-brand-100">
               <option.icon size={20} />
               <div className="flex flex-col text-start">
