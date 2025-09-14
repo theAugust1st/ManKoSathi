@@ -1,5 +1,8 @@
 const getToken = ()=> localStorage.getItem('token');
-
+type GetMeditationOptions = {
+  sortBy?:string,
+  order?:string
+}
 export interface NewSessionData {
   durationSeconds: string | number;
   meditationTechnique: string;
@@ -10,12 +13,18 @@ export interface NewSessionData {
   goals: string;
   backgroundSoundID:string ;
 }
-export const getMeditationSessions = async()=>{
+
+export const getMeditationSessions = async(options:GetMeditationOptions ={})=>{
     const token = getToken();
-    const response = await fetch('/api/meditation',{
+    if(!token)
+      throw new Error("No authentication token found.")
+    let url = '/api/meditation'
+    if(options.sortBy){
+      url += `?sortBy=${options.sortBy}&order=${options.order|| 'asc'}` 
+    }
+    const response = await fetch(url,{
         method:"GET",
         headers:{
-            'Content-Type':'Application/json',
             'Authorization':`Bearer ${token}`
         }
     }
