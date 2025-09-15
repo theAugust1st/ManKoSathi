@@ -16,6 +16,7 @@ import HabitPage from "./pages/HabitPage";
 import QuotesPage from "./pages/QuotesPage";
 import UserPage from "./pages/UserPage";
 import LandingPage from "./pages/LandingPage";
+import VerifyOtpPage from "./pages/VerifyOtpPage";
 
 function App() {
   const { isLoggedIn } = useAuth();
@@ -30,6 +31,7 @@ function App() {
           path="/register"
           element={isLoggedIn ? <Navigate to="/dashboard" /> : <Register />}
         ></Route>
+        <Route path="/verify-otp" element={<VerifyOtpPage/>}/>
         <Route element={<ProtectedRoute />}>
           <Route element={<MainLayout />}>
             <Route path="/dashboard" element={<DashBoard />}></Route>

@@ -23,7 +23,7 @@ type InputFields = z.infer<typeof signUpSchema>;
 
 function Register() {
   const navigate = useNavigate();
-  const {login} = useAuth();
+  const {setUser} = useAuth();
   const {
     register,
     reset,
@@ -46,7 +46,8 @@ function Register() {
     }
     else{
       console.log("registration Successful", result)
-      login(result.user,result.token);
+      setUser(result)
+      navigate('/verify-otp')
       reset()
     }
   }catch(err){
