@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "NODE_ENV=development node server.js"
+    "dev": "NODE_ENV=development node server.js",
+    "import:quotes":"node scripts/importQuotes.js"
   },
   "author": "Bimal,Bipin,Jayanta",
   "license": "ISC",
@@ -16,6 +17,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
-    "nodemailer": "^7.0.6"
+    "nodemailer": "^7.0.6",
+    "stream-chain": "^3.4.0",
+    "stream-json": "^1.9.1"
   }
 }
