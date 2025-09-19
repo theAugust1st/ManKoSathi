@@ -6,6 +6,7 @@ import {
   addFavouriteQuote,
   removeFavouriteQuote,
 } from "../services/quoteService";
+import Button from "../components/ui/Button";
 
 type QuoteType = {
   _id: string;
@@ -17,15 +18,18 @@ type QuoteType = {
 function QuotesPage() {
   const [activeTab, setActiveTab] = useState<"favorites" | "more">("favorites");
   const [quotes, setQuotes] = useState<QuoteType[]>([]);
-
-  // Fetch quotes and mark favorites
+  const [page, setPage] = useState<number>(1);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const limit = 30;
   useEffect(() => {
     const fetchQuotes = async () => {
+      setIsSubmitting(true);
       try {
-        const allRes = await getQuotes();
+        const allRes = await getQuotes({ page, limit });
         const favRes = await UserFavoriteQuotes();
-
-        const favoriteIds = new Set(favRes.favoriteQuotes.map((q: any) => q._id));
+        const favoriteIds = new Set(
+          favRes.favoriteQuotes.map((q: any) => q._id)
+        );
 
         const allQuotes: QuoteType[] = allRes.quotes.map((q: any) => ({
           ...q,
@@ -35,18 +39,18 @@ function QuotesPage() {
         setQuotes(allQuotes);
       } catch (error) {
         console.error("Failed to fetch quotes", error);
+      } finally {
+        setIsSubmitting(false);
       }
     };
 
     fetchQuotes();
-  }, []);
+  }, [page]);
 
-  // Toggle favorite (optimistic UI)
   const toggleFavorite = async (quoteId: string) => {
     const quote = quotes.find((q) => q._id === quoteId);
     if (!quote) return;
 
-    // Optimistic UI update
     setQuotes((prev) =>
       prev.map((q) =>
         q._id === quoteId ? { ...q, isFavorite: !q.isFavorite } : q
@@ -76,36 +80,38 @@ function QuotesPage() {
 
   return (
     <div className="space-y-6 p-6">
-      {/* Header */}
-      <div className="flex items-center gap-3">
-        <BookOpen size={32} />
-        <h1 className="text-3xl md:text-4xl font-bold text-brand-950">
-          Quotes
-        </h1>
-      </div>
+      <div className="sticky top-0 space-y-4 bg-brand-50 pb-2">
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <BookOpen size={32} />
+          <h1 className="text-3xl md:text-4xl font-bold text-brand-950">
+            Quotes
+          </h1>
+        </div>
 
-      {/* Tabs */}
-      <div className="flex gap-4 border-b border-brand-200 pb-2">
-        <button
-          className={`px-4 py-2 font-semibold ${
-            activeTab === "favorites"
-              ? "border-b-2 border-brand-500 text-brand-950"
-              : "text-gray-500"
-          }`}
-          onClick={() => setActiveTab("favorites")}
-        >
-          Favorites
-        </button>
-        <button
-          className={`px-4 py-2 font-semibold ${
-            activeTab === "more"
-              ? "border-b-2 border-brand-500 text-brand-950"
-              : "text-gray-500"
-          }`}
-          onClick={() => setActiveTab("more")}
-        >
-          More Quotes
-        </button>
+        {/* Tabs */}
+        <div className="flex gap-4 border-b border-brand-200 pb-2">
+          <button
+            className={`px-4 py-2 font-semibold ${
+              activeTab === "favorites"
+                ? "border-b-2 border-brand-500 text-brand-950"
+                : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab("favorites")}
+          >
+            Favorites
+          </button>
+          <button
+            className={`px-4 py-2 font-semibold ${
+              activeTab === "more"
+                ? "border-b-2 border-brand-500 text-brand-950"
+                : "text-gray-500"
+            }`}
+            onClick={() => setActiveTab("more")}
+          >
+            More Quotes
+          </button>
+        </div>
       </div>
 
       {/* Quotes List */}
@@ -142,6 +148,25 @@ function QuotesPage() {
           ))
         )}
       </div>
+      {quotes.length > 0 && activeTab==="more" ? (
+        <div className="flex justify-between items-center">
+          <Button
+            variant="secondary"
+            className={`${page === 1 ? "invisible" : "visible"}`}
+            onClick={() => setPage((prev) => prev - 1)}
+            disabled={isSubmitting}
+          >
+            Previous
+          </Button>
+          <Button 
+          onClick={() => setPage((prev) => prev + 1)} 
+          variant="primary"
+          disabled={isSubmitting}
+          >
+            Next
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }
