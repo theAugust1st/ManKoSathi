@@ -30,7 +30,7 @@ const quoteSchema = new mongoose.Schema({
 }
 
 },{timestamps: true})
-quoteSchema.index({quoteText:1,category:1},{unique: true})
+quoteSchema.index({quoteText:1},{unique: true})
 const Quote = mongoose.model("Quote",quoteSchema)
 
 module.exports = Quote;
