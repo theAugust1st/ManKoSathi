@@ -16,8 +16,8 @@ export const UserFavoriteQuotes = async () => {
     }
     return response.json();
 }
-export const getQuotes = async ()=>{
-    const response = await fetch('/api/quotes',{
+export const getQuotes = async ({limit,page}:{limit:number|undefined , page:number|undefined})=>{
+    const response = await fetch(`/api/quotes?limit=${limit}&page=${page}`,{
         method:'GET',
         headers:{
             'Content-Type':'application/json'
