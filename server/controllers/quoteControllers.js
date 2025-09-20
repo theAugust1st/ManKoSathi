@@ -17,8 +17,20 @@ const getQuotes = asyncHandler(async (req, res) => {
 
   const pagesize = parseInt(req.query.limit) || 30;
   const page = parseInt(req.query.page) || 1;
+  const category = req.query.category || "";
+  const search = req.query.search || "";
   const offSet = (page-1)*pagesize;
+
+  const matchStage = {};
+
+  if(category){
+    matchStage.category = category
+  }
+  if(search){
+    matchStage.$text = {$search:search}
+  }
   const result = await Quote.aggregate([
+    {$match:matchStage},
     {$sort:{_id:1}},
     {
         $facet:{
