@@ -1,4 +1,4 @@
-import { BookOpen, Heart } from "lucide-react";
+import { BookOpen, Droplet, Funnel, Heart, MessageCircleHeart, Minus, Mountain, Sunrise, TreeDeciduous, User, Users, Wind } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   getQuotes,
@@ -7,6 +7,8 @@ import {
   removeFavouriteQuote,
 } from "../services/quoteService";
 import Button from "../components/ui/Button";
+import DropdownMenu from "../components/ui/DropdownMenu";
+import SearchBar from "../components/ui/SearchBar";
 
 type QuoteType = {
   _id: string;
@@ -14,18 +16,71 @@ type QuoteType = {
   author: string;
   isFavorite: boolean;
 };
-
+const sortOptions = [
+    {
+    value: "sort",
+    label: "Category",
+    icon: Funnel,
+  },
+  {
+    value: "motivation",
+    label: "Motivation",
+    icon: Wind,
+  },
+    {
+    value: "wisdom",
+    label: "Wisdom",
+    icon:TreeDeciduous,
+  },{
+    value:"mindfulness",
+    label:"Mindfulness",
+    icon: Droplet
+  },
+    {
+    value: "preseverance",
+    label: "Preseverance",
+    icon: Mountain,
+  },
+    {
+    value: "calm",
+    label: "Calm",
+    icon: Minus,
+  },
+    {
+    value: "positivity",
+    label: "Positive",
+    icon:MessageCircleHeart,
+  },
+    {
+    value: "reflection",
+    label: "Reflection",
+    icon: Sunrise,
+  },
+    {
+    value: "inspiration",
+    label: "Inspiration",
+    icon: Users,
+  },
+    {
+    value: "self-awareness",
+    label: "Self-awareness",
+    icon:User,
+  }
+]
 function QuotesPage() {
   const [activeTab, setActiveTab] = useState<"favorites" | "more">("favorites");
   const [quotes, setQuotes] = useState<QuoteType[]>([]);
+  const [favoriteQuotes,setFavoriteQuotes] = useState<QuoteType[]>([])
   const [page, setPage] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sortBy, setSortBy] = useState<string>(sortOptions[0].value)
+  const [search, setSearch] = useState("")
   const limit = 30;
   useEffect(() => {
     const fetchQuotes = async () => {
       setIsSubmitting(true);
       try {
-        const allRes = await getQuotes({ page, limit });
+        const allRes = await getQuotes({ page, limit,category : sortBy,search});
         const favRes = await UserFavoriteQuotes();
         const favoriteIds = new Set(
           favRes.favoriteQuotes.map((q: any) => q._id)
@@ -35,7 +90,10 @@ function QuotesPage() {
           ...q,
           isFavorite: favoriteIds.has(q._id),
         }));
-
+        const allFavQuotes : QuoteType[] = favRes.favoriteQuotes.map((q:any)=>({
+          ...q,isFavorite: true
+        }))
+        setFavoriteQuotes(allFavQuotes)
         setQuotes(allQuotes);
       } catch (error) {
         console.error("Failed to fetch quotes", error);
@@ -45,42 +103,30 @@ function QuotesPage() {
     };
 
     fetchQuotes();
-  }, [page]);
+  }, [page,sortBy,search]);
 
   const toggleFavorite = async (quoteId: string) => {
+    const favQuote = favoriteQuotes.find((q)=>q._id === quoteId)
     const quote = quotes.find((q) => q._id === quoteId);
-    if (!quote) return;
-
-    setQuotes((prev) =>
-      prev.map((q) =>
-        q._id === quoteId ? { ...q, isFavorite: !q.isFavorite } : q
-      )
-    );
-
-    try {
-      if (quote.isFavorite) {
-        await removeFavouriteQuote(quoteId);
-      } else {
-        await addFavouriteQuote(quoteId);
-      }
-    } catch (error) {
-      console.error("Failed to update favorite", error);
-      // revert UI if API fails
-      setQuotes((prev) =>
-        prev.map((q) =>
-          q._id === quoteId ? { ...q, isFavorite: quote.isFavorite } : q
-        )
-      );
+    
+    if(favQuote){
+      setFavoriteQuotes((prev)=> prev.filter((q)=>q._id !==quoteId))
+      setQuotes(prev=>prev.map(q=>q._id === quoteId?{...q,isFavorite:true}:q))
+      await removeFavouriteQuote(quoteId);
     }
-  };
+    else if(quote){
+      const newFav = {...quote,isFavorite:true}
+      setFavoriteQuotes(prev=>[...prev,newFav])
+      setQuotes(prev=>prev.map(q=>q._id === quoteId?{...q,isFavorite:true}:q))
+    await addFavouriteQuote(quoteId);
+  }
+};
 
-  // Filter quotes based on active tab
-  const displayedQuotes =
-    activeTab === "favorites" ? quotes.filter((q) => q.isFavorite) : quotes;
+  const displayedQuotes = activeTab === "favorites" ? favoriteQuotes : quotes;
 
   return (
     <div className="space-y-6 p-6">
-      <div className="sticky top-0 space-y-4 bg-brand-50 pb-2">
+      <div className="sticky top-0 space-y-4 bg-brand-50 border-b border-brand-200 pb-2">
         {/* Header */}
         <div className="flex items-center gap-3">
           <BookOpen size={32} />
@@ -90,7 +136,8 @@ function QuotesPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-4 border-b border-brand-200 pb-2">
+        <div className="flex justify-between items-center">
+        <div className="flex gap-4 ">
           <button
             className={`px-4 py-2 font-semibold ${
               activeTab === "favorites"
@@ -111,6 +158,11 @@ function QuotesPage() {
           >
             More Quotes
           </button>
+        </div>
+        <div className="flex justify-center gap-4 items-center">
+        <SearchBar value={search} onChange={setSearch} />
+        <DropdownMenu options={sortOptions} value={sortBy} onChange={setSortBy} />
+        </div>
         </div>
       </div>
 

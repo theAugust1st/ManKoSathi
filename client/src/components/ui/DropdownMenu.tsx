@@ -4,15 +4,15 @@ export type SortOptions = {
     value: string,
     label: string,
     icon: LucideIcon,
-    description: string,
-    order:string
+    description?: string,
+    order?:string | null
 }
 type DropdownMenuProps ={
     options: SortOptions[],
     value: string,
     onChange: (value: string)=>void,
-    order:string,
-    onChangeOrder : (o:string) =>void
+    order?:string | null ,
+    onChangeOrder? : ((o:string) =>void )| null
 }
 function useClickOutside(ref:React.RefObject<HTMLDivElement | null>,callback:()=>void){
     useEffect(()=>{
@@ -32,11 +32,12 @@ function DropdownMenu({options,value,onChange,order,onChangeOrder}:DropdownMenuP
   const dropdownRef = useRef<HTMLDivElement>(null)
   useClickOutside(dropdownRef,()=>setIsOpen(false))
   const selectedOptionData = options.find(
-  (option) => (option.value === value && option.order === order)
-);
+  (option) => (option.value === value && (option.order? option.order===order : true)))
   function handleChange(newValue:string,newOrder:string){
     onChange(newValue)
-    onChangeOrder(newOrder)
+    if(onChangeOrder){
+      onChangeOrder(newOrder)
+    }
     setIsOpen(false)
 }
   return (
@@ -53,14 +54,14 @@ function DropdownMenu({options,value,onChange,order,onChangeOrder}:DropdownMenuP
           )}
           <span>{selectedOptionData?.label}</span>
         </div>
-        <ChevronDown size={20} className="" />
+        <ChevronDown size={20}/>
       </button>
       {isOpen && (
-        <div className="absolute mt-2 border border-2 border-brand-300 rounded-sm min-w-[240px] flex flex-col">
+        <div className="absolute mt-2 bg-white border border-2 border-brand-300 rounded-sm min-w-[240px] flex flex-col">
           {options.map((option) => (
             <button 
             key={option.value}
-            onClick={()=>handleChange(option.value,option.order)}
+            onClick={()=>handleChange(option.value,option.order ?? '')}
             className="w-full flex items-center gap-3 p-2 hover:bg-brand-100">
               <option.icon size={20} />
               <div className="flex flex-col text-start">
