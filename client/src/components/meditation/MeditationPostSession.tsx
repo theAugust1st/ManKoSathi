@@ -74,50 +74,50 @@ function MeditationPostSession() {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-2 md:p-4">
       {/* The main modal card */}
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-2xl p-8 border border-brand-100">
+      <div className="bg-white rounded-2xl shadow-lg w-full max-w-xs md:max-w-2xl p-4 md:p-8 border border-brand-100">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-4 md:mb-8">
           <div className="mb-4 flex justify-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <Heart className="text-green-500" size={32} />
+            <div className="w-12 h-12 md:w-16 md:h-16 bg-green-100 rounded-full flex items-center justify-center">
+              <Heart className="text-green-500 w-6 h-6 md:w-8 md:h-8" />
             </div>
           </div>
-          <h1 className="text-3xl font-bold text-brand-950 mb-2">
+          <h1 className="text-lg mdtext-3xl font-bold text-brand-950 md:mb-2">
             Session Complete!
           </h1>
-          <p className="text-brand-700">Reflect on your meditation practice</p>
+          <p className="text-brand-700 text-sm md:text-base">Reflect on your meditation practice</p>
         </div>
 
         {/* Session Summary */}
-        <div className="bg-brand-50 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold text-brand-900 mb-4">
+        <div className="bg-brand-50 rounded-lg p-2 md:p-6 mb-4 md:mb-8">
+          <h2 className="text-normal font-semibold text-brand-900 mb-2 md:mb-4">
             Session Summary
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center md:text-left">
             <div>
-              <p className="text-brand-700 text-sm mb-1">Duration:</p>
-              <p className="font-semibold text-brand-950">
+              <p className="text-brand-700 text-xs mb-1">Duration:</p>
+              <p className="font-semibold text-brand-950 text-sm md:text-base">
                 {settings ? totalDuration / 60 : "N/A"} minutes
               </p>
             </div>
             <div>
-              <p className="text-brand-700 text-sm mb-1">Technique:</p>
-              <p className="font-semibold text-brand-950 capitalize">
+              <p className="text-brand-700 text-xs mb-1">Technique:</p>
+              <p className="font-semibold text-sm md:text-base text-brand-950 capitalize">
                 {settings?.meditationTechnique}
               </p>
             </div>
             <div>
-              <p className="text-brand-700 text-sm mb-1">Goal:</p>
-              <p className="font-semibold text-brand-950 capitalize">
+              <p className="text-brand-700 text-xs mb-1">Goal:</p>
+              <p className="font-semibold text-sm md:text-base text-brand-950 capitalize">
                 {settings?.goals}
               </p>
             </div>
             <div>
-              <p className="text-brand-700 text-sm mb-1">Started feeling:</p>
+              <p className="text-brand-700 text-xs mb-1">Started feeling:</p>
               <div className="flex items-center justify-center md:justify-start gap-1">
-                <span className="font-semibold text-brand-950 capitalize">
+                <span className="font-semibold text-brand-950 capitalize text-sm md:text-base">
                   {settings?.mood.preSession}
                 </span>
               </div>
@@ -127,15 +127,15 @@ function MeditationPostSession() {
 
         {/* Post-Session Mood Selection */}
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-brand-900 mb-4">
+          <h3 className="text-normal md:text-lg font-semibold text-brand-900 mb-1 md:mb-4">
             How are you feeling right now?
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2 md:gap-4">
             {postMoods.map((mood) => (
               <button
                 key={mood.id}
                 onClick={() => setSelectedPostMood(mood.id)}
-                className={`px-4 py-2 rounded-lg border-2 transition-colors flex items-center gap-2
+                className={`p-2 md:px-4 md:py-2 rounded-lg border-2 transition-colors flex items-center gap-2 text-xs md:text-sm
                   ${
                     selectedPostMood === mood.id
                       ? "bg-brand-500 text-white border-brand-500"

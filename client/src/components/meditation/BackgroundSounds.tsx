@@ -1,4 +1,4 @@
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, Music } from "lucide-react";
 
 export type BackgroundSound = {
   _id: string;
@@ -22,11 +22,14 @@ function BackgroundSounds({
   onPlayingSound,
 }: BackgroundSoundsProps) {
   return (
-    <div className="mb-4">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">
+    <div className="mb-2 md:mb-4">
+      <div className="flex items-center gap-2 mb-2 md:gap-3">
+      <Music className="w-4 h-4 md:w-6 md:h-6"/>
+      <h3 className="text-base font-medium text-gray-900 ">
         Background Sound
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
         {backgroundSounds.map((sound, index) => {
           const isSoundPlaying = selectedSound === sound._id;
           const isPlayingSound = soundPlayingId === sound._id;
@@ -35,7 +38,7 @@ function BackgroundSounds({
             <button
               key={index}
               onClick={() => setSelectedSound(sound._id)}
-              className={`p-4 rounded-xl border transition-colors flex items-center justify-between ${
+              className={`p-2 md:p-4 rounded-xl border transition-colors flex items-center justify-between text-sm md:text-base ${
                 isSoundPlaying
                   ? "bg-brand-500 text-white ring-2 ring-brand-500"
                   : "bg-white text-brand-900 border-brand-200 hover:border-brand-400"
@@ -53,12 +56,12 @@ function BackgroundSounds({
                 }}
                 role="button"
                 tabIndex={0}
-                className="p-2 rounded-full hover:bg-white/20 cursor-pointer"
+                className="rounded-full hover:bg-white/20 cursor-pointer"
               >
                 {!isPlayingSound ? (
-                  <Play className="w-5 h-5" />
+                  <Play className="w-4 h-4 md:w-6 md:h-6" />
                 ) : (
-                  <Pause className="w-5 h-5" />
+                  <Pause className="w-4 h-4 md:w-6 md:h-6" />
                 )}
               </span>
             </button>
