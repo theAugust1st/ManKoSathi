@@ -153,17 +153,17 @@ function QuotesPage() {
     <div className="space-y-4 p-4 sm:p-6 lg:p-8">
       <div className="sticky top-0 space-y-2 bg-brand-50 rounded-lg border-1 border-brand-100 shadow-md  p-4">
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <BookOpen size={32} />
-          <h1 className="text-3xl md:text-4xl font-extrabold text-brand-950">
+        <div className="flex items-center gap-1 md:gap-2">
+          <BookOpen className="h-5 w-5 md:h-8 md:w-8"/>
+          <h1 className="text-lg md:text-4xl font-extrabold text-brand-950">
             Quotes
           </h1>
         </div>
         {/* mobile view */}
-        <div className=" space-y-4 md:hidden">
-          <div className="flex gap-4">
+        <div className=" space-y-2 md:hidden">
+          <div className="flex gap-2">
             <button
-              className={`flex-1 px-4 py-2 font-semibold text-sm rounded-md transition-all ${
+              className={`px-2 py-1 font-semibold text-xs rounded-md transition-all ${
                 activeTab === "favorites"
                   ? "bg-brand-500 text-white shadow-sm"
                   : "text-brand-600 hover:bg-brand-50 border-1 border-brand-100 shadow-sm"
@@ -173,7 +173,7 @@ function QuotesPage() {
               Favorites
             </button>
             <button
-              className={`flex-1 px-4 py-2 font-semibold text-sm rounded-md transition-all ${
+              className={` px-2 py-1 font-semibold text-xs rounded-md transition-all ${
                 activeTab === "more"
                   ? "bg-brand-500 text-white shadow-sm"
                   : "text-brand-500 hover:bg-brand-50 border-1 border-brand-100 shadow-sm"
@@ -228,7 +228,7 @@ function QuotesPage() {
       </div>
 
       {/* Quotes List */}
-      <div className="flex flex-col gap-2 pt-2">
+      <div className="flex flex-col gap-2 ">
         {displayedQuotes.length === 0 ? (
           <p className="text-gray-500">
             {activeTab === "favorites"
@@ -242,15 +242,14 @@ function QuotesPage() {
               className="flex items-center justify-between bg-white p-4 rounded-lg shadow"
             >
               <div>
-                <p className="italic text-brand-900">"{quote.quoteText}"</p>
-                <p className="text-md ml-4 font-semibold text-brand-950">
+                <p className="italic text-brand-900 text-xs sm:text-sm md:text-lg ">"{quote.quoteText}"</p>
+                <p className="text-[0.625rem] sm:text-xs md:text-sm ml-2 md:ml-4 font-bold text-brand-950">
                   - {quote.author}
                 </p>
               </div>
-              <button onClick={() => toggleFavorite(quote._id)}>
+              <button className="self-start md:self-center" onClick={() => toggleFavorite(quote._id)}>
                 <Heart
-                  size={24}
-                  className={`transition-colors ${
+                  className={`transition-colors w-4 h-4 md:w-6 md:h-6 ${
                     quote.isFavorite
                       ? "text-red-500 fill-current"
                       : "text-brand-600 hover:text-red-500"
