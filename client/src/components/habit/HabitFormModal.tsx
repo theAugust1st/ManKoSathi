@@ -6,13 +6,15 @@ type HabitFormModalProps = {
   type: 'create' | 'edit';
   onClose: ()=>void
   onSuccess?: () => void; // callback after creating/updating
-  id?:string
+  id?:string,
+  name?:string,
+  des?:string
 };
 
-export default function HabitFormModal({ onClose, onSuccess,type ,id}: HabitFormModalProps) {
-  const [habitName, setHabitName] = useState('');
+export default function HabitFormModal({ onClose, onSuccess,type ,id,name, des}: HabitFormModalProps) {
+  const [habitName, setHabitName] = useState<string>(name || '');
   const [frequency, setFrequency] = useState<'daily' | 'weekly'>('daily');
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState(des|| "")
   const {setIsHabits} = useHabit();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,33 +45,33 @@ export default function HabitFormModal({ onClose, onSuccess,type ,id}: HabitForm
 
   return (
     <>
-      <h2 className="text-xl font-bold mb-4">{type === 'create' ? 'Create Habit' : 'Edit Habit'}</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <h2 className="text-base md:text-lg font-bold mb-4">{type === 'create' ? 'Create Habit' : 'Edit Habit'}</h2>
+      <form onSubmit={handleSubmit} className=" space-y-2 md:space-y-4">
         <input
           type="text"
           placeholder="Habit Name"
           value={habitName}
           onChange={(e) => setHabitName(e.target.value)}
           required
-          className="w-full border p-2 rounded-lg"
+          className="w-full border p-2 rounded-lg text-sm md:text-base"
         />
         <input type="text"
         placeholder="Description"
         value={description}
         onChange={(e)=>setDescription(e.target.value)}
-        className="w-full border p-2 rounded-lg"
+        className="w-full border p-2 rounded-lg text-sm md:text-base"
          />
         <select
           value={frequency}
           onChange={(e) => setFrequency(e.target.value as 'daily' | 'weekly')}
-          className="w-full border p-2 rounded-lg"
+          className="w-full border p-2 rounded-lg text-sm md:text-base"
         >
           <option value="daily">Daily</option>
           <option value="weekly">Weekly</option>
         </select>
         <button
           type="submit"
-          className="w-full bg-brand-500 text-white py-2 rounded-lg hover:bg-brand-600"
+          className="w-full bg-brand-500 text-sm md:text-base text-white py-2 rounded-lg hover:bg-brand-600"
         >
           {type === 'create' ? 'Save' : 'Update'}
         </button>
