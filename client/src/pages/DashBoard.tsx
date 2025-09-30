@@ -6,6 +6,7 @@ import { getHabits } from '../services/habitServices';
 import { getRandomQuote } from '../services/quoteServices';
 import { getMeditationSessions } from '../services/meditationServices';
 import { useHabit } from '../hooks/useHabit';
+import { useAuth } from '../hooks/useAuth';
 export type CompletedLogEntry = {
   date:Date;
 }
@@ -55,6 +56,8 @@ function DashBoard() {
   const [quote, setQuote] = useState<Quote | null >(null)
   const [meditations, setMeditations] = useState<MeditationSessions[]>([])
   const {setIsHabits} = useHabit();
+  const {user} = useAuth();
+  console.log(user)
   useEffect(()=>{
     const fetchDashBoardData = async () => {
       try {
@@ -70,14 +73,14 @@ function DashBoard() {
     fetchDashBoardData();
   },[])
   return (
-    <div className="space-y-8">
+    <div className="space-y-4 md:space-y-8 p-4 md:p-8">
       {/* For greeting */}
       <header>
-        <h1 className="text-3xl md:text-4xl font-bold text-brand-950">Good Morning,<span className="text-brand-500">UserName</span></h1>
-        <p className="text-brand-800 mt-1">Ready to make today a great day?</p>
+        <h1 className="text-xl md:text-3xl font-bold text-brand-950">Good Morning,<span className="text-brand-500">{user?.name}</span></h1>
+        <p className="text-brand-800 md:mt-1 text-xs md:text-base">Ready to make today a great day?</p>
       </header>
       {/* for widgets */} 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2 md:gap-6">
         {/* Quote of the day widget */}
           <QuoteWidget quote = {quote}/>
         {/* Habits widgets */}

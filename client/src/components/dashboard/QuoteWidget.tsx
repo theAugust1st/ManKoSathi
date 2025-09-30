@@ -22,16 +22,15 @@ function QuoteWidget({quote}:QuoteProps) {
     }
   }
   return (
-            <div className="bg-white rounded-lg p-6 lg:col-span-3">
+            <div className="bg-white rounded-lg p-4 md:p-6 lg:col-span-3">
           <div className='flex items-center justify-between'>
-          <h2 className='text-lg font-semibold text-brand-900 mt-2 flex items-center gap-2'>
-            <BookOpen size={20}/>
+          <h2 className='text-base md:text-lg font-bold md:font-semiboldtext-brand-900 mt-2 flex items-center gap-2'>
+            <BookOpen className="w-4 h-4 md:w-6 md:h-6"/>
             Quote of the Day
             </h2>
         <button onClick={handleFavoriteClick} disabled={isSubmitting}>
           <Heart
-            size={24}
-            className={`transition-colors ${
+            className={`transition-colors w-4 h-4 md:w-6 md:h-6 ${
               isFavourite
                 ? "text-red-500 fill-current"
                 : "text-brand-600 hover:text-red-500"
@@ -39,8 +38,8 @@ function QuoteWidget({quote}:QuoteProps) {
           />
         </button>
           </div>
-            <p className="italic text-brand-900">"{quote?.quoteText}"</p>
-            <p className='text-md font-semibold text-brand-950'>-{quote?.author}</p>
+            <p className="italic text-xs md:text-base text-brand-900">"{quote?.quoteText}"</p>
+            <p className='text-md text-[0.625rem] md:text-sm ml-2 md:ml-4 font-bold text-brand-950'>-{quote?.author}</p>
         </div>
   )
 }
