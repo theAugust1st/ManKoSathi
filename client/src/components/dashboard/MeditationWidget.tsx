@@ -11,14 +11,14 @@ function MeditationWidget({meditations}: MeditationWidgetProps) {
   // In the future, this data will come from the DashboardPage as a prop.
 
   return (
-    <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm border border-brand-100 max-h-[300px] flex flex-col">
-      <h2 className="text-base md:tex-lg font-bold md:font-semi-bold text-brand-900 mb-2 md:mb-4 flex items-center gap-2">
-        <Wind size={20} />
+    <div className="bg-white p-2 sm:p-4 md:p-6 rounded-lg shadow-sm max-h-[300px] flex flex-col">
+      <h2 className="text-base md:tex-lg font-bold md:font-semi-bold text-brand-900 mb-2 md:mb-4 flex items-center gap-1 md:gap-2">
+        <Wind className="w-4 h-4 md:w-6 md:h-6" />
         Meditation
       </h2>
 
       {/* This is the main content area */}
-      <div className="flex-grow mb-2 md:mb-4 bg-brand-50 p-2 md:p-4 rounded-lg">
+      <div className="flex-grow mb-2 md:mb-4 bg-brand-50 p-2 md:p-4 rounded-sm md:rounded-lg">
         {meditations.length>0 ? (
           // --- What to show IF the user HAS a recent session ---
           <div>
@@ -38,7 +38,7 @@ function MeditationWidget({meditations}: MeditationWidgetProps) {
       </div>
 
       {/* This button is always visible */}
-      <button className="w-full bg-brand-500 text-white font-bold p-1 md:py-3 text-sm md:text-base rounded-lg cursor-pointer flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors">
+      <button className="w-full bg-brand-500 text-white font-bold p-1 md:py-3 text-sm md:text-base rounded-sm md:rounded-lg cursor-pointer flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors">
         <Plus className="h-4 w-4 md:h-6 md:w-6" />
         New Session
       </button>

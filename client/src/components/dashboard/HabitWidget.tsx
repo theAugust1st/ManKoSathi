@@ -17,9 +17,9 @@ function HabitWidget({ habits }: HabitWidgetProps) {
   const lastSevenDays = getLast7Days();
 
   return (
-    <div className="lg:col-span-2 bg-white p-4 md:p-6  rounded-lg border border-brand-100 min-h-[150px] max-h-[300px] md:min-h-[250] md:max-h-[500px] overflow-y-auto">
+    <div className="lg:col-span-2 bg-white p-2 sm:p-4 md:p-6  rounded-lg min-h-[150px] max-h-[300px] md:min-h-[250] md:max-h-[500px] overflow-y-auto">
       <div className="flex items-center justify-between mb-2 md:mb-6">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 md:gap-2">
           <ListChecks className="w-4 h-4 md:w-6 md:h-6" />
           <h1 className="text-base md:text-lg font-bold ">Habits</h1>
         </div>
@@ -34,7 +34,7 @@ function HabitWidget({ habits }: HabitWidgetProps) {
         </div>)
       }
       {/* Habit List */}
-      <div className="space-y-3">
+      <div className="space-y-2 md:space-y-3">
         {habits.map((habit) => {
           const completedDatesForHabit = new Set(
             habit.completedLog.map((log) => {
@@ -46,7 +46,7 @@ function HabitWidget({ habits }: HabitWidgetProps) {
           return (
             <div
               key={habit._id}
-              className="bg-brand-50 rounded-lg p-2 md:p-4 shadow-sm"
+              className="bg-brand-50 rounded-sm md:rounded-lg p-2 md:p-4 shadow-sm"
             >
               <div className="flex items-center justify-between">
                 {/* Habit Info */}
@@ -54,7 +54,7 @@ function HabitWidget({ habits }: HabitWidgetProps) {
                   <div className="w-5 h-5 md:w-10 md:h-10 bg-brand-100 rounded-sm md:rounded-lg flex items-center justify-center">
                     <Flame className="h-4 w-4 md:h-6 md:w-6" />
                   </div>
-                  <span className="font-medium text-sm md:text-base">{habit.habitName}</span>
+                  <span className="font-medium text-xs md:text-base">{habit.habitName}</span>
                 </div>
 
                 {/* Completion Checkboxes */}

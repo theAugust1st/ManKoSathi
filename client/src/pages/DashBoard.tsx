@@ -73,10 +73,10 @@ function DashBoard() {
     fetchDashBoardData();
   },[])
   return (
-    <div className="space-y-4 md:space-y-8 p-4 md:p-8">
+    <div className="space-y-4 md:space-y-8 p-2 sm:p-4 md:p-8">
       {/* For greeting */}
       <header>
-        <h1 className="text-xl md:text-3xl font-bold text-brand-950">Good Morning,<span className="text-brand-500">{user?.name}</span></h1>
+        <h1 className="text-xl md:text-3xl font-bold text-brand-950">Good Morning, <span className="text-brand-500">{user?.name}</span></h1>
         <p className="text-brand-800 md:mt-1 text-xs md:text-base">Ready to make today a great day?</p>
       </header>
       {/* for widgets */} 

@@ -22,9 +22,9 @@ function QuoteWidget({quote}:QuoteProps) {
     }
   }
   return (
-            <div className="bg-white rounded-lg p-4 md:p-6 lg:col-span-3">
+            <div className="bg-white rounded-lg p-2 sm:p-4 md:p-6 lg:col-span-3">
           <div className='flex items-center justify-between'>
-          <h2 className='text-base md:text-lg font-bold md:font-semiboldtext-brand-900 mt-2 flex items-center gap-2'>
+          <h2 className='text-base md:text-lg font-bold md:font-semiboldtext-brand-900 mt-1 md:mt-2 flex items-center gap-1 md:gap-2'>
             <BookOpen className="w-4 h-4 md:w-6 md:h-6"/>
             Quote of the Day
             </h2>
