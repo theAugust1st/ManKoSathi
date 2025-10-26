@@ -82,45 +82,45 @@ function MeditationPage() {
     }
   }
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 p-4 sm:p-6 md:p-8">
       {/* 1. Header and Action Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-3xl md:text-4xl fonft-bold text-brand-950 flex items-center gap-3">
-          <Wind size={32} />
-          Meditation History
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sticky top-0 space-y-1 bg-brand-50 rounded-md border-1 border-brand-100 shadow-sm p-2 md:p-4">
+        <h1 className="flex items-center gap-1 md:gap-2">
+          <Wind className="h-5 w-5 md:w-8 md:h-8" />
+          <span className="text-lg md:text-4xl font-bold">Meditation</span>
         </h1>
         <div className="flex items-center gap-2">
           <DropdownMenu options={sortOptions} value={sortBy} onChange={setSortBy} order={order} onChangeOrder={setOrder}/>
         <button
           onClick={handleChange}
-          className="w-full sm:w-auto bg-brand-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors"
+          className="px-2 py-1 md:px-4 md:py-2 bg-brand-500 text-white font-normal md:font-bold rounded-md flex gap-1 md:gap-2 items-center justify-center hover:bg-brand-600 transition-colors"
         >
-          <Plus size={20} />
-          Log New Session
+          <Plus className="h-4 w-4 md:h-6 md:h-6" />
+          <span className="text-xs md:text-base">Log New Session</span>
         </button>
         </div>
       </div>
 
       {/* 2. History List */}
-      <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-brand-100">
+      <div className="bg-white p-2 md:p-4 sm:p-6 rounded-md shadow-sm border border-brand-100">
         {sessions.length > 0 ? (
           <ul className="space-y-3">
             {sessions.map((session) => (
               <li
                 key={session._id}
-                className="flex items-center justify-between bg-brand-50 p-4 rounded-lg"
+                className="flex items-center justify-between bg-brand-50  px-2 py-4 md:p-4 rounded-md"
               >
                 <div>
-                  <p className="font-semibold text-brand-950">
+                  <p className="text-sm sm:text-base md:text-lg font-bold text-brand-950">
                     {formatDuration(session.durationSeconds)} of{" "}
                     {session.meditationTechnique}
                   </p>
-                  <p className="text-sm text-brand-700">
+                  <p className="text-[0.625rem] md:text-base text-brand-700">
                     {formatDate(session.sessionDate)}
                   </p>
                 </div>
-                <button onClick={()=>handleDeleteSession(session._id)} className="p-2 text-brand-600 hover:text-red-500 hover:bg-red-100 rounded-full transition-colors">
-                  <Trash2 size={18} />
+                <button onClick={()=>handleDeleteSession(session._id)} className="text-brand-600 hover:text-red-500 hover:bg-red-100 rounded-full transition-colors self-start md:self-center">
+                  <Trash2 className="h-4 w-4 md:w-6 md:h-6" />
                 </button>
               </li>
             ))}
