@@ -55,17 +55,17 @@ function DropdownMenu({
     <div className="relative inline-block" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex text-sm md:text-base justify-between items-center border border-2 rounded-md border-brand-300 p-2 hover:bg-brand-200 transition-all duration-200 ${
+        className={`flex px-2 py-1 text-sm md:text-base md:px-4 md:py-2 justify-between items-center border border-2 rounded-md border-brand-100 cursor-pointer focus:outline-none focus:ring-1 focus:border-brand-300 focus:ring-brand-600 focus:ring-offset-2 transition-all duration-200 ${
           isOpen ? "bg-brand-50" : ""
         }`}
       >
         <div className="flex items-center gap-2">
-          {selectedOptionData && <selectedOptionData.icon size={20} />}
-          <span className="text-sm md:text-base">
+          {selectedOptionData && <selectedOptionData.icon size={15} />}
+          <span className="text-xs md:text-base">
             {selectedOptionData?.label}
           </span>
         </div>
-        {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+        {isOpen ? <ChevronUp size={15} /> : <ChevronDown size={15} />}
       </button>
       {isOpen && (
         <div className="absolute mt-2 bg-white border border-2 border-brand-300 rounded-sm  flex flex-col">
@@ -73,12 +73,12 @@ function DropdownMenu({
             <button
               key={option.value}
               onClick={() => handleChange(option.value, option.order ?? "")}
-              className="w-full flex items-center gap-3 p-2 hover:bg-brand-100"
+              className="w-full min-w-[180px] flex items-center gap-3 p-2 hover:bg-brand-100 border-b border-brand-200"
             >
               <option.icon size={20} />
               <div className="flex flex-col text-start">
                 <span className="text-sm md:text-base">{option.label}</span>
-                <span className="text-xs">{option.description}</span>
+                <span className="text-[0.625rem]">{option.description}</span>
               </div>
             </button>
           ))}
