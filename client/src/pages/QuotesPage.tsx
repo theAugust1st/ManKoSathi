@@ -1,4 +1,17 @@
-import { BookOpen, Droplet, Funnel, Heart, MessageCircleHeart, Minus, Mountain, Sunrise, TreeDeciduous, User, Users, Wind } from "lucide-react";
+import {
+  BookOpen,
+  Droplet,
+  Funnel,
+  Heart,
+  MessageCircleHeart,
+  Minus,
+  Mountain,
+  Sunrise,
+  TreeDeciduous,
+  User,
+  Users,
+  Wind,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   getQuotes,
@@ -17,7 +30,7 @@ type QuoteType = {
   isFavorite: boolean;
 };
 const sortOptions = [
-    {
+  {
     value: "sort",
     label: "Category",
     icon: Funnel,
@@ -27,60 +40,66 @@ const sortOptions = [
     label: "Motivation",
     icon: Wind,
   },
-    {
+  {
     value: "wisdom",
     label: "Wisdom",
-    icon:TreeDeciduous,
-  },{
-    value:"mindfulness",
-    label:"Mindfulness",
-    icon: Droplet
+    icon: TreeDeciduous,
   },
-    {
+  {
+    value: "mindfulness",
+    label: "Mindfulness",
+    icon: Droplet,
+  },
+  {
     value: "preseverance",
     label: "Preseverance",
     icon: Mountain,
   },
-    {
+  {
     value: "calm",
     label: "Calm",
     icon: Minus,
   },
-    {
+  {
     value: "positivity",
     label: "Positive",
-    icon:MessageCircleHeart,
+    icon: MessageCircleHeart,
   },
-    {
+  {
     value: "reflection",
     label: "Reflection",
     icon: Sunrise,
   },
-    {
+  {
     value: "inspiration",
     label: "Inspiration",
     icon: Users,
   },
-    {
+  {
     value: "self-awareness",
     label: "Self-awareness",
-    icon:User,
-  }
-]
+    icon: User,
+  },
+];
 function QuotesPage() {
   const [activeTab, setActiveTab] = useState<"favorites" | "more">("favorites");
   const [quotes, setQuotes] = useState<QuoteType[]>([]);
-  const [favoriteQuotes,setFavoriteQuotes] = useState<QuoteType[]>([])
+  const [favoriteQuotes, setFavoriteQuotes] = useState<QuoteType[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [sortBy, setSortBy] = useState<string>(sortOptions[0].value)
-  const [search, setSearch] = useState("")
+  const [sortBy, setSortBy] = useState<string>(sortOptions[0].value);
+  const [search, setSearch] = useState("");
   const limit = 30;
   useEffect(() => {
     const fetchQuotes = async () => {
       setIsSubmitting(true);
       try {
-        const allRes = await getQuotes({ page, limit,category : sortBy,search});
+        const allRes = await getQuotes({
+          page,
+          limit,
+          category: sortBy,
+          search,
+        });
         const favRes = await UserFavoriteQuotes();
         const favoriteIds = new Set(
           favRes.favoriteQuotes.map((q: any) => q._id)
@@ -90,10 +109,13 @@ function QuotesPage() {
           ...q,
           isFavorite: favoriteIds.has(q._id),
         }));
-        const allFavQuotes : QuoteType[] = favRes.favoriteQuotes.map((q:any)=>({
-          ...q,isFavorite: true
-        }))
-        setFavoriteQuotes(allFavQuotes)
+        const allFavQuotes: QuoteType[] = favRes.favoriteQuotes.map(
+          (q: any) => ({
+            ...q,
+            isFavorite: true,
+          })
+        );
+        setFavoriteQuotes(allFavQuotes);
         setQuotes(allQuotes);
       } catch (error) {
         console.error("Failed to fetch quotes", error);
@@ -103,71 +125,110 @@ function QuotesPage() {
     };
 
     fetchQuotes();
-  }, [page,sortBy,search]);
+  }, [page, sortBy, search]);
 
   const toggleFavorite = async (quoteId: string) => {
-    const favQuote = favoriteQuotes.find((q)=>q._id === quoteId)
+    const favQuote = favoriteQuotes.find((q) => q._id === quoteId);
     const quote = quotes.find((q) => q._id === quoteId);
-    
-    if(favQuote){
-      setFavoriteQuotes((prev)=> prev.filter((q)=>q._id !==quoteId))
-      setQuotes(prev=>prev.map(q=>q._id === quoteId?{...q,isFavorite:true}:q))
+
+    if (favQuote) {
+      setFavoriteQuotes((prev) => prev.filter((q) => q._id !== quoteId));
+      setQuotes((prev) =>
+        prev.map((q) => (q._id === quoteId ? { ...q, isFavorite: true } : q))
+      );
       await removeFavouriteQuote(quoteId);
+    } else if (quote) {
+      const newFav = { ...quote, isFavorite: true };
+      setFavoriteQuotes((prev) => [...prev, newFav]);
+      setQuotes((prev) =>
+        prev.map((q) => (q._id === quoteId ? { ...q, isFavorite: true } : q))
+      );
+      await addFavouriteQuote(quoteId);
     }
-    else if(quote){
-      const newFav = {...quote,isFavorite:true}
-      setFavoriteQuotes(prev=>[...prev,newFav])
-      setQuotes(prev=>prev.map(q=>q._id === quoteId?{...q,isFavorite:true}:q))
-    await addFavouriteQuote(quoteId);
-  }
-};
+  };
 
   const displayedQuotes = activeTab === "favorites" ? favoriteQuotes : quotes;
 
   return (
-    <div className="space-y-6 p-6">
-      <div className="sticky top-0 space-y-4 bg-brand-50 border-b border-brand-200 pb-2">
+    <div className="space-y-4 p-4 sm:p-6 lg:p-8">
+      <div className="sticky top-0 space-y-2 bg-brand-50 rounded-lg border-1 border-brand-100 shadow-md  p-4">
         {/* Header */}
-        <div className="flex items-center gap-3">
-          <BookOpen size={32} />
-          <h1 className="text-3xl md:text-4xl font-bold text-brand-950">
+        <div className="flex items-center gap-1 md:gap-2">
+          <BookOpen className="h-5 w-5 md:h-8 md:w-8"/>
+          <h1 className="text-lg md:text-4xl font-extrabold text-brand-950">
             Quotes
           </h1>
         </div>
-
-        {/* Tabs */}
-        <div className="flex justify-between items-center">
-        <div className="flex gap-4 ">
-          <button
-            className={`px-4 py-2 font-semibold ${
-              activeTab === "favorites"
-                ? "border-b-2 border-brand-500 text-brand-950"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("favorites")}
-          >
-            Favorites
-          </button>
-          <button
-            className={`px-4 py-2 font-semibold ${
-              activeTab === "more"
-                ? "border-b-2 border-brand-500 text-brand-950"
-                : "text-gray-500"
-            }`}
-            onClick={() => setActiveTab("more")}
-          >
-            More Quotes
-          </button>
+        {/* mobile view */}
+        <div className=" space-y-2 md:hidden">
+          <div className="flex gap-2">
+            <button
+              className={`px-2 py-1 font-semibold text-xs rounded-md transition-all ${
+                activeTab === "favorites"
+                  ? "bg-brand-500 text-white shadow-sm"
+                  : "text-brand-600 hover:bg-brand-50 border-1 border-brand-100 shadow-sm"
+              }`}
+              onClick={() => setActiveTab("favorites")}
+            >
+              Favorites
+            </button>
+            <button
+              className={` px-2 py-1 font-semibold text-xs rounded-md transition-all ${
+                activeTab === "more"
+                  ? "bg-brand-500 text-white shadow-sm"
+                  : "text-brand-500 hover:bg-brand-50 border-1 border-brand-100 shadow-sm"
+              }`}
+              onClick={() => setActiveTab("more")}
+            >
+              More Quotes
+            </button>
+          </div>
+          <div className="space-y-2">
+            <SearchBar value={search} onChange={setSearch} />
+            <DropdownMenu
+              options={sortOptions}
+              value={sortBy}
+              onChange={setSortBy}
+            />
+          </div>
         </div>
-        <div className="flex justify-center gap-4 items-center">
-        <SearchBar value={search} onChange={setSearch} />
-        <DropdownMenu options={sortOptions} value={sortBy} onChange={setSortBy} />
-        </div>
+        {/* desktop view */}
+        <div className="hidden md:flex justify-between items-start text-base lg:text-lg gap-2">
+          <div className="flex gap-4 ">
+            <button
+              className={`px-4 py-2 font-semibold  ${
+                activeTab === "favorites"
+                  ? "border-b-2 border-brand-500 text-brand-950"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("favorites")}
+            >
+              Favorites
+            </button>
+            <button
+              className={`px-4 py-2 font-semibold ${
+                activeTab === "more"
+                  ? "border-b-2 border-brand-500 text-brand-950"
+                  : "text-gray-500"
+              }`}
+              onClick={() => setActiveTab("more")}
+            >
+              More Quotes
+            </button>
+          </div>
+          <div className="flex flex-col md:flex-row justify-center gap-4 items-start">
+            <SearchBar value={search} onChange={setSearch} />
+            <DropdownMenu
+              options={sortOptions}
+              value={sortBy}
+              onChange={setSortBy}
+            />
+          </div>
         </div>
       </div>
 
       {/* Quotes List */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 ">
         {displayedQuotes.length === 0 ? (
           <p className="text-gray-500">
             {activeTab === "favorites"
@@ -181,15 +242,14 @@ function QuotesPage() {
               className="flex items-center justify-between bg-white p-4 rounded-lg shadow"
             >
               <div>
-                <p className="italic text-brand-900">"{quote.quoteText}"</p>
-                <p className="text-md ml-4 font-semibold text-brand-950">
+                <p className="italic text-brand-900 text-xs sm:text-sm md:text-lg ">"{quote.quoteText}"</p>
+                <p className="text-[0.625rem] sm:text-xs md:text-sm ml-2 md:ml-4 font-bold text-brand-950">
                   - {quote.author}
                 </p>
               </div>
-              <button onClick={() => toggleFavorite(quote._id)}>
+              <button className="self-start md:self-center" onClick={() => toggleFavorite(quote._id)}>
                 <Heart
-                  size={24}
-                  className={`transition-colors ${
+                  className={`transition-colors w-4 h-4 md:w-6 md:h-6 ${
                     quote.isFavorite
                       ? "text-red-500 fill-current"
                       : "text-brand-600 hover:text-red-500"
@@ -200,7 +260,7 @@ function QuotesPage() {
           ))
         )}
       </div>
-      {quotes.length > 0 && activeTab==="more" ? (
+      {quotes.length > 0 && activeTab === "more" ? (
         <div className="flex justify-between items-center">
           <Button
             variant="secondary"
@@ -210,10 +270,10 @@ function QuotesPage() {
           >
             Previous
           </Button>
-          <Button 
-          onClick={() => setPage((prev) => prev + 1)} 
-          variant="primary"
-          disabled={isSubmitting}
+          <Button
+            onClick={() => setPage((prev) => prev + 1)}
+            variant="primary"
+            disabled={isSubmitting}
           >
             Next
           </Button>

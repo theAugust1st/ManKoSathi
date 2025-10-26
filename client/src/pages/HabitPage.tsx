@@ -54,11 +54,11 @@ function HabitPage() {
         fetchHabits()
   },[sortBy,order])
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 p-4 md:p-8">
       {/* 1. Header and Action Button */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <h1 className="text-3xl md:text-4xl fonft-bold text-brand-950 flex items-center gap-3">
-          <ListChecks size={32} />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 md:gap-4">
+        <h1 className="text-lg md:text-4xl fonft-bold text-brand-950 flex items-center gap-3">
+          <ListChecks className="w-6 h-6 md:w-8 md:h-8" />
           Habits
         </h1>
         <div className="flex gap-2 items-center">
@@ -74,7 +74,7 @@ function HabitPage() {
               e.stopPropagation();
               setIsModalOpen(true);
             }}
-            className="w-full sm:w-auto bg-brand-500 text-white font-bold py-3 px-6 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors"
+            className="w-full text-xs md:text-base sm:w-auto bg-brand-500 text-white font-bold px-2 py-1 md:px-4 md:py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors"
           >
             <Plus size={20} />
             Add New Habit

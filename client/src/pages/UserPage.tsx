@@ -89,31 +89,31 @@ function ProfilePage() {
   };
 
   return (
-    <div className="max-w-3xl p-6 space-y-6 ">
+    <div className="max-w-3xl p-4 md:p-6 space-y-2 md:space-y-6 ">
       <div className="flex justify-between items-center">
-        <header className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+        <header className="md:space-y-1">
+          <h1 className="text-lg sm:text-xl lg:text-4xl font-bold">
             User Profile
           </h1>
-          <p className="text-gray-600 text-sm sm:text-base">
+          <p className="text-gray-600 text-xs sm:text-sm">
             Manage your account settings and preferences
           </p>
         </header>
         <button
           onClick={logout}
-          className="flex items-center gap-2 border border-gray-400 py-2 px-4 rounded-lg hover:bg-red-100 hover:text-red-700 "
+          className="flex items-center gap-2 border border-gray-400 py-1 px-4 md:py-2 md:px-4 rounded-lg hover:bg-red-100 hover:text-red-700 "
         >
-          <LogOut size={20} />
-          <span className="font-semibold">Logout</span>
+          <LogOut className="h-4 w-4 md:h-6 md:w-6" />
+          <span className="text-sm md:text-base font-bold md:text-bold">Logout</span>
         </button>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow rounded-lg p-4 space-y-6"
+        className="bg-white shadow rounded-lg p-4 space-y-3 md:space-y-6"
       >
         <div className="flex justify-between items-center ">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-bold">
+          <h2 className="text-base sm:text-lg lg:text-xl font-bold">
             Personal Information
           </h2>
           <button
@@ -121,14 +121,14 @@ function ProfilePage() {
               e.preventDefault();
               setIsEditing((prev) => !prev);
             }}
-            className="bg-brand-400 text-white py-2 px-3 flex justify-center items-center gap-2 rounded-lg hover:bg-brand-500"
+            className="bg-brand-400 text-white gap-1 py-2 px-3 flex justify-center items-center md:gap-2 text-sm md:text-base rounded-lg hover:bg-brand-500"
           >
-            <SquarePen size={20} /> {isEditing ? "Close" : "Edit Profile"}
+            <SquarePen className="h-4 w-4 md:h-6 md:w-6" /> {isEditing ? "Close" : "Edit Profile"}
           </button>
         </div>
 
         {/* User info and inputs */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3 md:gap-6">
           <Input
             id="userName"
             label="Full Name"
@@ -149,9 +149,9 @@ function ProfilePage() {
               disabled
               placeholder="a@b.c"
             />
-            <p className="text-gray-400 text-xs mt-1">
+            {isEditing && <p className="text-gray-400 text-xs mt-1">
               Email is not changeable.
-            </p>
+            </p>}
           </div>
 
           <Input
@@ -166,11 +166,11 @@ function ProfilePage() {
           />
 
           <div>
-            <label className="block text-sm font-medium" htmlFor="gender">
+            <label className="block text-xs md:text-sm font-medium" htmlFor="gender">
               Gender:
             </label>
             <select
-              className={`w-full border p-2 rounded-md bg-white text-brand-950 placeholder:brand-300 focus:outline-none focus:ring-2 transition-colors duration-200 
+              className={`w-full border px-4 py-2 rounded-md bg-white text-brand-950 placeholder:brand-300 focus:outline-none focus:ring-2 transition-colors duration-200 
               ${
                 errors.gender
                   ? "border-red-500 focus:border-red-500 focus:ring-red-200"
@@ -195,13 +195,13 @@ function ProfilePage() {
 
           <div>
             <label
-              className="block text-sm font-medium"
+              className="block text-xs md:text-sm font-medium"
               htmlFor="language_preference"
             >
               Language:
             </label>
             <select
-              className="w-full border p-2 rounded-md bg-white text-brand-950 placeholder:brand-300 focus:outline-none focus:ring-2 transition-colors duration-200"
+              className="w-full border px-4 py-2 rounded-md bg-white text-brand-950 placeholder:brand-300 focus:outline-none focus:ring-2 transition-colors duration-200"
               id="language_preference"
               {...register("language_preference")}
               disabled
@@ -210,9 +210,9 @@ function ProfilePage() {
               <option value="English">English</option>
               <option value="Nepali">Nepali</option>
             </select>
-            <p className="text-gray-400 text-xs mt-1">
+            {isEditing && <p className="text-gray-400 text-xs mt-1">
               Language translation coming soon....
-            </p>
+            </p>}
           </div>
         </div>
 

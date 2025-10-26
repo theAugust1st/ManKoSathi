@@ -93,64 +93,64 @@ function LiveSessionPage() {
     <div className="min-h-screen bg-brand-50 flex justify-center items-center p-4">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-3xl p-8 sm:p-12 border border-brand-100 flex flex-col items-center">
 
-        <div className="text-6xl sm:text-7xl font-light text-brand-900 tracking-wider mb-4">
+        <div className="text-4xl sm:text-5xl font-light text-brand-900 tracking-wider mb-2 md:mb-4">
           {formatTime(totalDuration - elapsedSeconds)}
         </div>
 
         {/* Progress Bar */}
-        <div className="w-full bg-brand-100 rounded-full h-2 mb-6">
+        <div className="w-full bg-brand-100 rounded-full  h-1 md:h-2 mb-6">
           <div
-            className="bg-brand-500 h-2 rounded-full transition-all"
+            className="bg-brand-500 h-1 md:h-2 rounded-full transition-all"
             style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
 
         {/* Meditation Info */}
         <div className="text-center mb-8">
-          <h2 className="text-xl font-semibold text-brand-950">
+          <h2 className="text-base md:text-lg font-semibold md:font-bold text-brand-950">
             {settings?.meditationTechnique}
           </h2>
-          <p className="text-brand-700 mt-1">Ready to begin your practice</p>
+          <p className="text-brand-700 text-xs mt-1">Ready to begin your practice</p>
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-2 md:gap-4 mb-2 md:mb-6">
           {/* Restart */}
           <button
             onClick={handleRestart}
-            className="p-3 bg-brand-100 text-brand-700 rounded-full hover:bg-brand-200 transition-colors"
+            className="p-2 md:p-4 bg-brand-100 text-brand-700 rounded-full hover:bg-brand-200 transition-colors"
           >
-            <RotateCcw size={24} />
+            <RotateCcw className='w-4 h-4 md:h-6 md:w-6' />
           </button>
 
           {/* Play/Pause */}
           <button
             onClick={togglePlayPause}
-            className="p-6 bg-brand-500 text-white rounded-full shadow-lg hover:bg-brand-600 transition-colors"
+            className="p-4 md:p-6 bg-brand-500 text-white rounded-full shadow-lg hover:bg-brand-600 transition-colors"
           >
-            {isPlaying ? <Pause size={32} /> : <Play size={32} />}
+            {isPlaying ? <Pause className='w-6 h-6 md:w-8 md:h-8' /> : <Play className='w-6 h-6 md:w-8 md:h-8' />}
           </button>
 
           {/* Mute/Unmute */}
           <button
             onClick={toggleMute}
-            className="p-3 bg-brand-100 text-brand-700 rounded-full hover:bg-brand-200 transition-colors"
+            className="p-2 md:p-4 bg-brand-100 text-brand-700 rounded-full hover:bg-brand-200 transition-colors"
           >
-            {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
+            {isMuted ? <VolumeX className='w-4 h-4 md:h-6 md:w-6' /> : <Volume2 className='w-4 h-4 md:h-6 md:w-6'/>}
           </button>
 
           {/* Complete */}
           <button
             onClick={handleComplete}
-            className="p-3 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
+            className="p-2 md:p-4 bg-green-500 text-white rounded-full hover:bg-green-600 transition-colors"
           >
-            <Check size={24} />
+            <Check className='w-4 h-4 md:h-6 md:w-6' />
           </button>
         </div>
 
         {/* Background Sound Info */}
         <div className="text-center">
-          <p className="text-sm text-brand-600">
+          <p className="text-xs text-brand-600">
             Background: {settings?.backgroundSound.name}{' '}
             {isPlaying ? '(Playing)' : '(Paused)'}
           </p>

@@ -125,31 +125,32 @@ export default function MeditationSessionSetup() {
     setSelectedSound(soundId);
   }
   return (
-    <div className="max-w-4xl p-6 bg-white min-h-screen">
+    <div className="space-y-4 p-4 sm:p-6 md:p-8 max-w-4xl min-h-screen">
+    <div className=" p-2 md:p-6 bg-white rounded-md">
       <div>
         <button
           onClick={() => navigate(-1)}
           className="hover:bg-brand-400 rounded-sm hover:text-white"
         >
-          <ArrowLeft size={20} />
+          <ArrowLeft className="h-4 w-4 md:h-6 md:w-6" />
         </button>
       </div>
-      <div className="rounded-2xl p-8">
+      <div className="rounded-2xl  p-2 sm:p-4 md:p-6 lg:p-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-2">
+          <h1 className="text-xl md:text-2xl lg:text-2xl font-semibold text-gray-900 md:mb-2">
             Start your Meditation Session
           </h1>
-          <p className="text-gray-600">Set up your practice</p>
+          <p className="text-gray-600 text-sm md:text-base">Set up your practice</p>
         </div>
 
         {/* Duration Section */}
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock className="w-5 h-5 text-gray-600" />
-            <span className="text-lg font-medium text-gray-900">Duration</span>
+        <div className="mb-2 md:mb-4 ">
+          <div className="flex items-center gap-2 mb-2 md:mb-4">
+            <Clock className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
+            <span className="text-base md:text-lg font-medium text-gray-900">Duration</span>
           </div>
-          <div className="flex flex-wrap gap-3 mb-3">
+          <div className="flex flex-wrap gap-2 md:gap-4 mb-2 md:mb-4">
             {durations.map((duration) => (
               <button
                 key={duration}
@@ -157,7 +158,7 @@ export default function MeditationSessionSetup() {
                   setSelectedDuration(duration);
                   setShowCustom(false);
                 }}
-                className={`px-4 py-2 rounded-lg border transition-colors ${
+                className={`px-4 py-2 md:px-6 md:py-3 rounded-lg border transition-colors text-sm md:text-base ${
                   selectedDuration === duration && !showCustom
                     ? "bg-brand-500 text-white border-brand-600"
                     : "bg-white text-gray-700 border-brand-300 hover:border-brand-400"
@@ -170,13 +171,14 @@ export default function MeditationSessionSetup() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setShowCustom(!showCustom)}
-              className={`px-3 py-2 rounded-lg border transition-colors ${
+              className={`flex p-2 md:py-2 md:px-3 rounded-lg border transition-colors items center gap-1 text-sm md:text-base ${
                 showCustom
                   ? "bg-brand-500 text-white border-brand-600"
                   : "bg-white text-gray-700 border-brand-300 hover:border-brand-400"
               }`}
             >
               <ChevronDown className="w-4 h-4" />
+              <span>Custom</span>
             </button>
             {showCustom && (
               <input
@@ -191,7 +193,8 @@ export default function MeditationSessionSetup() {
         </div>
 
         {/* Meditation Technique Section */}
-        <div className="grid grid-cols-4 md:grid-cols-7 gap-3 mb-4">
+        <h3 className="text-base md:text-lg mb-2 md:mb-4">Meditation Technique</h3>
+        <div className="grid grid-cols-4 md:grid-cols-7 gap-2 mb-2 md:gap-3 md:mb-4">
           {techniques.map((technique) => {
             const IconComponent = technique.icon;
             const isSelected = selectedTechnique === technique.id;
@@ -200,30 +203,30 @@ export default function MeditationSessionSetup() {
               <button
                 key={technique.id}
                 onClick={() => setSelectedTechnique(technique.id)}
-                className={`p-4 rounded-xl border transition-colors flex flex-col items-center gap-2 ${
+                className={`p-2 md:p-4 rounded-xl border transition-colors flex flex-col items-center gap-2 ${
                   isSelected
                     ? "bg-brand-500 text-white border-brand-500"
                     : "bg-white text-gray-700 border-gray-300 hover:border-gray-400"
                 }`}
               >
-                <IconComponent className="w-6 h-6" />
-                <span className="text-sm font-medium">{technique.label}</span>
+                <IconComponent className=" w-4 h-4 md:w-6 md:h-6" />
+                <span className="text-sm md:text-base font-medium">{technique.label}</span>
               </button>
             );
           })}
         </div>
 
         {/* Mood Section */}
-        <div className="mb-4">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
+        <div className="mb-2 md:mb-4">
+          <h3 className="text-base md:text-lg font-medium text-gray-900 mb-2 md:mb-4">
             How are you feeling right now?
           </h3>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2 md:gap-4">
             {moods.map((mood) => (
               <button
                 key={mood.id}
                 onClick={() => setSelectedMood(mood.id)}
-                className={`px-4 py-2 rounded-lg border transition-colors flex items-center gap-2 ${
+                className={`px-4 py-2 text-sm md:text-base lg:text-lg rounded-lg border transition-colors flex items-center gap-2 ${
                   selectedMood === mood.id
                     ? "bg-brand-500 text-white border-brand-500"
                     : "bg-white text-gray-700 border-brand-300 hover:border-brand-400"
@@ -238,14 +241,14 @@ export default function MeditationSessionSetup() {
 
         {/* Primary Goal Section */}
 
-        <div className="mb-4">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock className="w-5 h-5 text-gray-600" />
-            <span className="text-lg font-medium text-gray-900">
+        <div className="mb-2 md:mb-4">
+          <div className="flex items-center gap-2 md:gap-2 mb-2 md:mb-4">
+            <Clock className="w-4 h-4 md:w-6 md:h-6 text-gray-600" />
+            <span className="text-base md:text-lg font-medium text-gray-900">
               Primary Goal
             </span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
             {goals.map((goal) => {
               const IconComponent = goal.icon;
               const isSelected = selectedGoal === goal.id;
@@ -254,13 +257,13 @@ export default function MeditationSessionSetup() {
                 <button
                   key={goal.id}
                   onClick={() => setSelectedGoal(goal.id)}
-                  className={`p-4 rounded-xl border transition-colors flex items-center gap-3 ${
+                  className={`p-2 md:p-4 text-sm md:text-base lg:text-lg rounded-xl border transition-colors flex items-center gap-3 ${
                     isSelected
                       ? "bg-brand-500 text-white border-brand-500"
                       : "bg-white text-gray-700 border-brand-300 hover:border-brand-400"
                   }`}
                 >
-                  <IconComponent className="w-5 h-5" />
+                  <IconComponent className="w-4 h-4 md:w-6 md:h-6" />
                   <span className="font-medium">{goal.label}</span>
                 </button>
               );
@@ -278,8 +281,8 @@ export default function MeditationSessionSetup() {
         />
 
         {/* Notes Section */}
-        <div className="mb-4">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
+        <div className="mb-2 md:mb-4">
+          <h3 className="text-base md:tex-lg font-medium text-gray-900 mb-4">
             Notes(Optional)
           </h3>
           <textarea
@@ -304,11 +307,12 @@ export default function MeditationSessionSetup() {
         )}
 
         {!canStartSession && (
-          <p className="text-center text-gray-500 text-sm mt-2">
+          <p className="text-center text-gray-500 text-xs mt-2">
             Please select technique, mood and goal to continue
           </p>
         )}
       </div>
+    </div>
     </div>
   );
 }

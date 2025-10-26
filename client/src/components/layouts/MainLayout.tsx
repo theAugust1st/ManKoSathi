@@ -14,9 +14,9 @@ function MainLayout() {
     }
   },[onBoardingModalNeeded])
   return (
-    <div className="flex min-h-screen">
+    <div className="flex h-screen">
         <Sidebar/>
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto">
             <Outlet/>
         </main>
         { onBoardingModalNeeded && <OnBoardingModal isOpen={isModelOpen} onClose={()=>setIsModelOpen(false)}/>}
