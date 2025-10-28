@@ -1,5 +1,6 @@
 import { Wind, Plus } from "lucide-react";
 import type { MeditationSessions } from "../../pages/DashBoard";
+import { useNavigate } from "react-router-dom";
 
 
 type MeditationWidgetProps = {
@@ -9,7 +10,10 @@ meditations:MeditationSessions[]
 function MeditationWidget({meditations}: MeditationWidgetProps) {
   // For now, we will use the mock data.
   // In the future, this data will come from the DashboardPage as a prop.
-
+  const navigate = useNavigate()
+  const handleNewSession = ()=>{
+    navigate("/meditation/setup")
+  }
   return (
     <div className="bg-white p-2 sm:p-4 md:p-6 rounded-lg shadow-sm max-h-[300px] flex flex-col">
       <h2 className="text-base md:tex-lg font-bold md:font-semi-bold text-brand-900 mb-2 md:mb-4 flex items-center gap-1 md:gap-2">
@@ -38,7 +42,7 @@ function MeditationWidget({meditations}: MeditationWidgetProps) {
       </div>
 
       {/* This button is always visible */}
-      <button className="w-full bg-brand-500 text-white font-bold p-1 md:py-3 text-sm md:text-base rounded-sm md:rounded-lg cursor-pointer flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors">
+      <button onClick={handleNewSession} className="w-full bg-brand-500 text-white font-bold p-1 md:py-3 text-sm md:text-base rounded-sm md:rounded-lg cursor-pointer flex items-center justify-center gap-2 hover:bg-brand-600 transition-colors">
         <Plus className="h-4 w-4 md:h-6 md:w-6" />
         New Session
       </button>
