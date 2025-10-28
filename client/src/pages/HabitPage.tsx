@@ -6,6 +6,7 @@ import Modal from "../components/ui/Modal.tsx";
 import HabitFormModal from "../components/habit/HabitFormModal.tsx";
 import DropdownMenu from "../components/ui/DropdownMenu.tsx";
 import { getHabits } from "../services/habitServices.ts";
+import { useLocation } from "react-router-dom";
 const sortOptions = [
   {
     value: "createdAt",
@@ -41,7 +42,11 @@ function HabitPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [sortBy, setSortBy] = useState<string>(sortOptions[0].value);
   const [order, setOrder] = useState<string>(sortOptions[0].order);
+  const location = useLocation()
   useEffect(() => {
+    if(location.state?.action === "openCreateHabit"){
+      setIsModalOpen(true)
+    }
     const fetchHabits = async () => {
       try {
         console.log("Calling habit befre fetch", sortBy);
