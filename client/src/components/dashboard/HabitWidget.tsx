@@ -1,9 +1,11 @@
 import { ListChecks, Plus, Flame, CircleFadingPlus } from "lucide-react";
 import type { Habit } from "../../pages/DashBoard";
+import { useNavigate } from "react-router-dom";
 type HabitWidgetProps = {
   habits: Habit[];
 };
 function HabitWidget({ habits }: HabitWidgetProps) {
+  const navigate = useNavigate();
   const getLast7Days = () => {
     const dates = [];
     for (let i = 6; i >= 0; i--) {
@@ -15,7 +17,9 @@ function HabitWidget({ habits }: HabitWidgetProps) {
     return dates;
   };
   const lastSevenDays = getLast7Days();
-
+  const handleNavigate = () => {
+    navigate("/habits", { state: { action: "openCreateHabit" } });
+  };
   return (
     <div className="lg:col-span-2 bg-white p-2 sm:p-4 md:p-6  rounded-lg min-h-[150px] max-h-[300px] md:min-h-[250] md:max-h-[500px] overflow-y-auto">
       <div className="flex items-center justify-between mb-2 md:mb-6">
@@ -23,16 +27,25 @@ function HabitWidget({ habits }: HabitWidgetProps) {
           <ListChecks className="w-4 h-4 md:w-6 md:h-6" />
           <h1 className="text-base md:text-lg font-bold ">Habits</h1>
         </div>
-        {habits.length>0?<button className="w-6 h-6 md:w-8 md:h-8 bg-brand-400 hover:bg-brand-500 rounded-full cursor-pointer flex items-center justify-center transition-colors">
-          <Plus className="w-4 h-4 md:w-6 md:h-6 text-white" />
-        </button>:""}
+        {habits.length > 0 ? (
+          <button onClick={handleNavigate} className="w-6 h-6 md:w-8 md:h-8 bg-brand-400 hover:bg-brand-500 rounded-full cursor-pointer flex items-center justify-center transition-colors">
+            <Plus className="w-4 h-4 md:w-6 md:h-6 text-white" />
+          </button>
+        ) : (
+          ""
+        )}
       </div>
-      {habits.length === 0 && 
-        (<div className="flex flex-col justify-center items-center gap-2">
+      {habits.length === 0 && (
+        <div
+          onClick={handleNavigate}
+          className="flex flex-col justify-center items-center gap-2"
+        >
           <CircleFadingPlus className="w-12 h-12 md:w-16 md:h-16 text-brand-400 cursor-pointer" />
-          <span className="text-xs md:text-lg text-gray-500">Click to start your Habit</span>
-        </div>)
-      }
+          <span className="text-xs md:text-lg text-gray-500">
+            Click to start your Habit
+          </span>
+        </div>
+      )}
       {/* Habit List */}
       <div className="space-y-2 md:space-y-3">
         {habits.map((habit) => {
@@ -54,7 +67,9 @@ function HabitWidget({ habits }: HabitWidgetProps) {
                   <div className="w-5 h-5 md:w-10 md:h-10 bg-brand-100 rounded-sm md:rounded-lg flex items-center justify-center">
                     <Flame className="h-4 w-4 md:h-6 md:w-6" />
                   </div>
-                  <span className="font-medium text-xs md:text-base">{habit.habitName}</span>
+                  <span className="font-medium text-xs md:text-base">
+                    {habit.habitName}
+                  </span>
                 </div>
 
                 {/* Completion Checkboxes */}
