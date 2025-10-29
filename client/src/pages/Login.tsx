@@ -3,7 +3,7 @@ import Button from "../components/ui/Button";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 
@@ -52,11 +52,11 @@ function Login() {
   };
   return (
     <div className="min-h-screen w-screen bg-auth-gradient flex justify-center items-center p-4">
-      <div className="w-full max-w-md rounded-lg bg-black/20 backdrop-blur-sm p-8 border border-white/10 ">
-        <div className="flex flex-col gap-8 ">
+      <div className="w-full max-w-xs md:max-w-md rounded-lg bg-black/20 backdrop-blur-sm p-6 md:p-8 border border-white/10 ">
+        <div className="flex flex-col gap-4 sm:gap-8 ">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-black">ManKoSathi</h1>
-            <p className="text-xl text-slate-200 mt-2">
+            <h1 className="text-xl md:text-3xl font-bold text-brand-50">ManKoSathi</h1>
+            <p className="text-xs md:text-xl text-slate-200 md:mt-2">
               Login to your ManKoSathi account
             </p>
           </div>
@@ -86,14 +86,14 @@ function Login() {
             </Button>
           </form>
           <div className="center">
-            <p className="text-base text-center text-slate-400">
-              New to our side?{" "}
-              <span
-                onClick={() => navigate("/register")}
-                className="underline underline-offset-2 cursor-pointer hover:text-blue-500"
+            <p className="text-xs md:text-base text-center text-slate-400">
+              New to our site?{" "}
+              <Link
+                to={"/register"}
+                className="text-slate-400 underline decoration-slate-400 decoration-1 underline-offset-2 cursor-pointer hover:text-blue-500 hover:decoration-blue-500"
               >
                 SignUp
-              </span>
+              </Link>
             </p>
           </div>
         </div>
