@@ -85,6 +85,11 @@ export default function MeditationSessionSetup() {
       }
     };
     fetchBackgroundSounds();
+    return () =>{
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    }
   }, []);
   const selectedBackgroundSound = backgroundSounds.find(
     (sound) => sound._id === selectedSound
