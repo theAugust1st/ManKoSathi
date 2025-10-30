@@ -24,28 +24,43 @@ function OnBoardingModal({ isOpen, onClose }: OnBoardingModalProps) {
     dob: "",
     gender: "",
   });
+  const [errors, setErrors] = useState<{ dob?: string; gender?: string }>({});
 
   const { user, setUser } = useAuth();
 
   async function handleNext() {
     if (currentStep < totalSteps) {
+      // validate current step before advancing
+      if (currentStep === 1 && !formData.dob) {
+        setErrors({ dob: "Date of birth is required" });
+        return;
+      }
+      setErrors({});
       setCurrentStep(currentStep + 1);
     } else {
-      // ✅ Only update if user filled both fields
-      if (formData.dob && formData.gender) {
-        try {
-          const updatedUser = { ...user, ...formData } as User;
-          setUser(updatedUser);
-
-          const response = await updateUserProfile(updatedUser);
-          console.log("Profile updated successfully:", response);
-
-          setUser(response.user);
-        } catch (error) {
-          console.error("Error updating profile:", error);
-        }
+      // validate before finishing
+      const newErrors: { dob?: string; gender?: string } = {};
+      if (!formData.dob) newErrors.dob = "Date of birth is required";
+      if (!formData.gender) newErrors.gender = "Please select a gender";
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
+        return;
       }
-      onClose(); // Always close modal (Finish or Skip)
+
+      // both fields present -> update profile
+      try {
+        const updatedUser = { ...user, ...formData } as User;
+        setUser(updatedUser);
+
+        const response = await updateUserProfile(updatedUser);
+        console.log("Profile updated successfully:", response);
+
+        setUser(response.user);
+      } catch (error) {
+        console.error("Error updating profile:", error);
+      }
+
+      onClose();
     }
   }
 
@@ -90,9 +105,15 @@ function OnBoardingModal({ isOpen, onClose }: OnBoardingModalProps) {
               id="dob"
               name="dob"
               value={formData.dob}
-              onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, dob: e.target.value });
+                if (errors.dob) setErrors({ ...errors, dob: undefined });
+              }}
               className="w-full border border-solid px-4 py-2 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 border-gray-300 focus:border-brand-500 focus:ring-brand-200"
             />
+            {errors.dob && (
+              <p className="text-red-500 text-sm mt-1">{errors.dob}</p>
+            )}
           </div>
         )}
 
@@ -108,9 +129,10 @@ function OnBoardingModal({ isOpen, onClose }: OnBoardingModalProps) {
               id="gender"
               name="gender"
               value={formData.gender}
-              onChange={(e) =>
-                setFormData({ ...formData, gender: e.target.value })
-              }
+              onChange={(e) => {
+                setFormData({ ...formData, gender: e.target.value });
+                if (errors.gender) setErrors({ ...errors, gender: undefined });
+              }}
               className="w-full border px-4 py-2 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 border-gray-300 focus:border-brand-500 focus:ring-brand-200"
             >
               <option value="">Select</option>
@@ -119,6 +141,9 @@ function OnBoardingModal({ isOpen, onClose }: OnBoardingModalProps) {
               <option value="Others">Others</option>
               <option value="Prefer Not To Say">Prefer Not To Say</option>
             </select>
+            {errors.gender && (
+              <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+            )}
           </div>
         )}
       </div>
