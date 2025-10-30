@@ -2,6 +2,7 @@ import { ListChecks, Plus, Calendar, User, Zap, Trophy } from "lucide-react";
 import Habit from "../components/habit/Habit.tsx";
 import { useHabit } from "../hooks/useHabit";
 import { useEffect, useState } from "react";
+import { toast } from 'react-toastify';
 import Modal from "../components/ui/Modal.tsx";
 import HabitFormModal from "../components/habit/HabitFormModal.tsx";
 import DropdownMenu from "../components/ui/DropdownMenu.tsx";
@@ -49,11 +50,11 @@ function HabitPage() {
     }
     const fetchHabits = async () => {
       try {
-        console.log("Calling habit befre fetch", sortBy);
         const habit = await getHabits({ sortBy, order });
         setIsHabits(habit.habits);
       } catch (error) {
-        console.log("Failed to fetch the habits try again later", error);
+        console.error("Failed to fetch habits", error);
+        toast.error('Failed to fetch habits. Please try again later.');
       }
     };
     fetchHabits();

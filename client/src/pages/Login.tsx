@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { toast } from 'react-toastify';
 
 const loginSchema = z.object({
   email: z.string().email({ error: "Please enter a valid email" }),
@@ -34,7 +35,6 @@ function Login() {
       });
       const result = await response.json();
       if (!response.ok) {
-        console.log("Login Failed:", result.message);
         // If account is not verified, send OTP (using sendOtp) and navigate to verify page
         if (result.message && result.message.toLowerCase().includes("not verified")) {
           try {
@@ -55,18 +55,18 @@ function Login() {
             navigate("/verify-otp", { state: { email: data.email } });
           }
         } else {
-          alert(`Login Failed: ${result.message}`);
+          toast.error(result.message || 'Login failed');
         }
       } else {
-        console.log("Login Successful", result);
+        // login successful
         const { user, token } = result;
         login(user, token);
         navigate("/dashboard");
         reset();
       }
     } catch (err) {
-      console.log("An error occured", err);
-      alert("An error occured during login");
+      console.error("An error occured", err);
+      toast.error("An error occured during login");
     } finally {
       setIsSubmitting(false);
     }

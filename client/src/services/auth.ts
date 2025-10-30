@@ -1,5 +1,4 @@
 export const verifyOtp = async({email,otp}:{email:string,otp:string}) =>{
-    console.log(email,otp)
     const response = await fetch('/api/auth/verifyOTP',{
         method:"POST",
         headers:{

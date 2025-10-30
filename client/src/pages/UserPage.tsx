@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from 'react-toastify';
 import Button from "../components/ui/Button";
 import { LogOut, SquarePen } from "lucide-react";
 import Input from "../components/ui/Input";
@@ -70,17 +71,15 @@ function ProfilePage() {
     try {
       const response = await updateUserProfile(updatedProfile)
       localStorage.setItem("user", JSON.stringify(response.user));
-      console.log("Profile updated successfully:", response);
+      toast.success('Profile updated!');
 
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile. Please try again.");
+      toast.error("Failed to update profile. Please try again.");
       return;
-    } 
+    }
     setUser(updatedProfile);
     setIsEditing(false);
-
-    alert("Profile updated!");
   };
 
   const handleCancel = () => {

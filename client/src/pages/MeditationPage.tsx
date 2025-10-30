@@ -4,6 +4,7 @@ import { getMeditationSessions,deleteMeditationSession } from "../services/medit
 import type { MeditationSessions } from "./DashBoard";
 import { useNavigate } from "react-router-dom";
 import DropdownMenu from "../components/ui/DropdownMenu";
+import { toast } from 'react-toastify';
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
@@ -46,8 +47,8 @@ function MeditationPage() {
         const data = await getMeditationSessions({sortBy,order});
         setSessions(data.sessions);
       } catch (error) {
-        alert("Error: Not able to get the previous logs for now.");
-        console.log(error, "Failed to retrived the meditation logs.");
+        toast.error("Error: Not able to get the previous logs for now.");
+        console.error(error, "Failed to retrived the meditation logs.");
       }
     };
     historySession();
@@ -77,7 +78,7 @@ function MeditationPage() {
       await deleteMeditationSession(sessionId);
       setSessions((prev)=>prev.filter(session=>session._id !== sessionId));
     } catch (error) {
-      alert("Error: Unable to delete the session. Please try again later.");
+      toast.error("Error: Unable to delete the session. Please try again later.");
       console.error("Failed to delete the session.", error);
     }
   }

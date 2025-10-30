@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from 'react-toastify';
 import {
   Heart,
   RotateCcw,
@@ -53,14 +54,14 @@ function MeditationPostSession() {
       await createMeditationSession(sessionData);
     } catch (error) {
       console.error("Failed to save session.", error);
-      alert("Failed to save session. Please try again.");
+      toast.error("Failed to save session. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
   };
   const handleSaveAndFinish = async() => {
     if (!selectedPostMood) {
-      alert("Please select how you are feeling now.");
+      toast.error("Please select how you are feeling now.");
       return;
     }
     await saveSession();

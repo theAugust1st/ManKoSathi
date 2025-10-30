@@ -2,6 +2,7 @@ import { BookOpen,Heart } from "lucide-react"
 import type { Quote } from "../../pages/DashBoard"
 import { useState } from "react"
 import { addFavouriteQuote } from "../../services/quoteServices";
+import { toast } from 'react-toastify';
 type QuoteProps = {
   quote: Quote | null 
 }
@@ -15,8 +16,8 @@ function QuoteWidget({quote}:QuoteProps) {
       await addFavouriteQuote(quote._id);
       setIsFavourite(true);
     } catch (error) {
-      console.log(error,"Failed to add into the favourites.");
-      alert("Could not add to the favourites at this time.");
+      console.error(error,"Failed to add into the favourites.");
+      toast.error("Could not add to the favourites at this time.");
     }finally{
       setIsSubmitting(false)
     }

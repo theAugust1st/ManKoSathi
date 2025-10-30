@@ -1,5 +1,6 @@
 import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
+import { toast } from 'react-toastify';
 import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,19 +48,17 @@ function Register() {
       });
       const result = await response.json();
       if (!response.ok) {
-        console.log("Registration Failed:", result.message);
-        alert(`Registration Failed: ${result.message}`);
+        toast.error(result.message || 'Registration failed');
       } else {
-        console.log("registration Successful", result);
         // pass email and otpExpires to the verify page so it can show the countdown
+        toast.success('Registration successful — check your email for the code');
         navigate("/verify-otp", { state: { email: result.email, otpExpires: result.otpExpires } });
         reset();
       }
     } catch (err) {
-      console.log("An error occured", err);
-      alert("An error occured during registration");
+      console.error("An error occured", err);
+      toast.error("An error occured during registration");
     }
-    console.log(data);
   };
   return (
     <div className="min-h-screen w-screen bg-auth-gradient flex justify-center items-center p-4">
