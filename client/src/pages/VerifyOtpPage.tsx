@@ -2,6 +2,7 @@ import { ArrowLeft, Mail } from "lucide-react";
 import Button from "../components/ui/Button";
 import { useRef, useState, useEffect } from "react";
 import { verifyOtp, sendOtp } from "../services/auth";
+import { toast } from 'react-toastify';
 import { useAuth } from "../hooks/useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -66,7 +67,7 @@ function VerifyOtpPage() {
       setIsSubmitting(true);
       const emailToUse = user?.email || navState.email;
       if (!emailToUse) {
-        alert("Missing email to verify");
+        toast.error("Missing email to verify");
         setIsSubmitting(false);
         return;
       }
@@ -135,7 +136,7 @@ function VerifyOtpPage() {
   const handleResend = async () => {
     const emailToUse = user?.email || navState.email;
     if (!emailToUse) {
-      alert('Missing email to send OTP');
+      toast.error('Missing email to send OTP');
       return;
     }
     setIsResending(true);
@@ -151,10 +152,10 @@ function VerifyOtpPage() {
       // set cooldown to 90s
       setResendCooldownSec(90);
       // optional: show a small confirmation (can be replaced by toast)
-      alert('A new verification code has been sent to your email.');
+  toast.success('A new verification code has been sent to your email.');
     } catch (err) {
       console.error('Failed to resend OTP', err);
-      alert('Failed to resend OTP. Please try again later.');
+  toast.error('Failed to resend OTP. Please try again later.');
     } finally {
       setIsResending(false);
     }

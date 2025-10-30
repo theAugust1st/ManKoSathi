@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from 'react-toastify';
 import { createHabit, updateHabit } from "../../services/habitServices";
 import { useHabit } from "../../hooks/useHabit";
 
@@ -21,7 +22,7 @@ export default function HabitFormModal({ onClose, onSuccess,type ,id,name, des}:
     try {
       if(type === 'create'){
       const res = await createHabit({ habitName:habitName, frequency:frequency,description });
-      console.log("create:",res);
+  // console.debug('create', res);
       setIsHabits((prev)=>[res.habit,...prev])
       onSuccess?.(); // optional callback to update habit list
       onClose();     // close the modal after success
@@ -39,7 +40,7 @@ export default function HabitFormModal({ onClose, onSuccess,type ,id,name, des}:
       }
     } catch (error) {
       console.error("Failed to save new habit:", error);
-      alert("Failed to create habit now.");
+      toast.error("Failed to create habit now.");
     }
   };
 

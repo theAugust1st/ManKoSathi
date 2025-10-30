@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { toast } from 'react-toastify';
 import {
   Clock,
   Heart,
@@ -81,7 +82,7 @@ export default function MeditationSessionSetup() {
         const data = await getBackgroundSounds();
         setBackgroundSounds(data.sounds);
       } catch (error) {
-        alert("Error: Not able to fetch the background sounds for now.");
+        toast.error("Error: Not able to fetch the background sounds for now.");
       }
     };
     fetchBackgroundSounds();

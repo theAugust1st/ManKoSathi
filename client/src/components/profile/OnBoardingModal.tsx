@@ -5,6 +5,7 @@ import Button from "../ui/Button";
 import { useAuth } from "../../hooks/useAuth";
 import type { User } from "../../contexts/AuthContext";
 import { updateUserProfile } from "../../services/profileServices";
+import { toast } from 'react-toastify';
 
 type OnBoardingData = {
   dob: string;
@@ -48,17 +49,18 @@ function OnBoardingModal({ isOpen, onClose }: OnBoardingModalProps) {
       }
 
       // both fields present -> update profile
-      try {
-        const updatedUser = { ...user, ...formData } as User;
-        setUser(updatedUser);
+        try {
+          const updatedUser = { ...user, ...formData } as User;
+          setUser(updatedUser);
 
-        const response = await updateUserProfile(updatedUser);
-        console.log("Profile updated successfully:", response);
+          const response = await updateUserProfile(updatedUser);
+          toast.success('Profile updated successfully');
 
-        setUser(response.user);
-      } catch (error) {
-        console.error("Error updating profile:", error);
-      }
+          setUser(response.user);
+        } catch (error) {
+          console.error("Error updating profile:", error);
+          toast.error('Error updating profile');
+        }
 
       onClose();
     }

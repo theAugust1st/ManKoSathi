@@ -2,6 +2,7 @@ import QuoteWidget from '../components/dashboard/QuoteWidget';
 import HabitWidget from '../components/dashboard/HabitWidget';
 import MeditationWidget from '../components/dashboard/MeditationWidget';
 import { useState,useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { getHabits } from '../services/habitServices';
 import { getRandomQuote } from '../services/quoteServices';
 import { getMeditationSessions } from '../services/meditationServices';
@@ -57,7 +58,7 @@ function DashBoard() {
   const [meditations, setMeditations] = useState<MeditationSessions[]>([])
   const {setIsHabits} = useHabit();
   const {user} = useAuth();
-  console.log(user)
+  // console.debug user info removed
   useEffect(()=>{
     const fetchDashBoardData = async () => {
       try {
@@ -67,7 +68,8 @@ function DashBoard() {
         setMeditations(meditationSessionsData.sessions)
         setIsHabits(habitsData.habits)
       } catch (err:any) {
-        console.log(err)
+        console.error(err)
+        toast.error('Failed to load dashboard data');
       }
     }
     fetchDashBoardData();

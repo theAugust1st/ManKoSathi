@@ -3,7 +3,6 @@ type HabitYearGridProps = {
   completedDates: (string | { date: string })[]
 }
 const HabitYearGrid = ({ completedDates = [] }:HabitYearGridProps) => {
-  console.log("completeDates:",completedDates)
   const [weeksToShow, setWeeksToShow] = useState(52);
 
   // Detect screen size to set weeks

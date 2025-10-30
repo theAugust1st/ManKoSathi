@@ -1,5 +1,6 @@
 import { Check,Trash2 } from "lucide-react";
 import { useState } from "react";
+import { toast } from 'react-toastify';
 import HabitYearGrid from "./HabitYearGrid";
 import { completeHabit, deleteHabit } from "../../services/habitServices";
 import { useHabit } from "../../hooks/useHabit";
@@ -34,13 +35,13 @@ function Habit({
   const handleCompleteHabit = async (id: string) => {
     try {
       const response = await completeHabit(id);
-      console.log(response);
+  // console.debug(response);
       setIsHabits((prev: Habit[]) =>
         prev.map((h) => (h._id === id ? response.habit : h))
       );
     } catch (error) {
       console.error("Error: Failed to complete the habit.", error);
-      alert("Failed to complete the habit for now.");
+      toast.error("Failed to complete the habit for now.");
     }
   };
   const handleDelete = async (e:React.MouseEvent<HTMLButtonElement>,id:string) => {
@@ -51,7 +52,8 @@ function Habit({
       await deleteHabit(id);
       setIsHabits((prev: Habit[]) => prev.filter((h) => h._id !== id));
     } catch (error){
-      console.log("Failed to delete now");
+      console.error("Failed to delete habit:", error);
+      toast.error("Failed to delete habit. Please try again.");
     }
   }
   const normalizedLastCompleted = lastCompletedDate
