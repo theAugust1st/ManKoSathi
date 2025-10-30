@@ -13,3 +13,16 @@ export const verifyOtp = async({email,otp}:{email:string,otp:string}) =>{
     }
     return response.json();
 }
+
+export const sendOtp = async ({ email }: { email: string }) => {
+    const response = await fetch('/api/auth/sendOtp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+    });
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to send otp');
+    }
+    return response.json();
+};

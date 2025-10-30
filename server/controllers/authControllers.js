@@ -16,6 +16,22 @@ const registerUser = asyncHandler(async (req, res, next) => {
   // check if the user is already register or not
   const existingUser = await User.findOne({ email });
   if (existingUser) {
+    // If the user exists but is not verified, resend a fresh OTP and allow them to verify
+    if (!existingUser.isVerified) {
+      const otp = crypto.randomInt(100000, 999999).toString();
+      const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+      existingUser.otp = otp;
+      existingUser.otpExpires = otpExpires;
+      await existingUser.save();
+      await sendEmail(email, otp);
+      return res.status(200).json({
+        message:
+          "An account for this email already exists but is not verified. A new verification code has been sent.",
+        email: existingUser.email,
+        otpExpires: existingUser.otpExpires,
+      });
+    }
+
     return res.status(400).json({
       message: "User with this email or username already exists.",
     });
@@ -123,8 +139,36 @@ const loginUser = asyncHandler(async (req, res, next) => {
     );
   }
 });
+const sendOtp = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    res.status(400);
+    throw new Error("Please provide an email address");
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  if (user.isVerified) {
+    res.status(400);
+    throw new Error("User is already verified");
+  }
+  const otp = crypto.randomInt(100000, 999999).toString();
+  const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+  user.otp = otp;
+  user.otpExpires = otpExpires;
+  await user.save();
+  await sendEmail(user.email, otp);
+  res.status(200).json({
+    message: "OTP sent successfully. Please check your email.",
+    email: user.email,
+    otpExpires: user.otpExpires,
+  });
+});
 module.exports = {
   registerUser,
   verifyOTP,
+  sendOtp,
   loginUser,
 };
