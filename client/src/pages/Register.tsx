@@ -3,7 +3,7 @@ import Button from "../components/ui/Button";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useAuth } from "../hooks/useAuth";
+// import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const signUpSchema = z.object({
@@ -28,7 +28,8 @@ type InputFields = z.infer<typeof signUpSchema>;
 
 function Register() {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  // not setting auth user here — registration returns only otp info; we'll navigate to verify page
+  // const { setUser } = useAuth();
   const {
     register,
     reset,
@@ -50,8 +51,8 @@ function Register() {
         alert(`Registration Failed: ${result.message}`);
       } else {
         console.log("registration Successful", result);
-        setUser(result);
-        navigate("/verify-otp");
+        // pass email and otpExpires to the verify page so it can show the countdown
+        navigate("/verify-otp", { state: { email: result.email, otpExpires: result.otpExpires } });
         reset();
       }
     } catch (err) {

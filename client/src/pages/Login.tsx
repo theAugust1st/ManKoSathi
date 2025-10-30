@@ -35,7 +35,28 @@ function Login() {
       const result = await response.json();
       if (!response.ok) {
         console.log("Login Failed:", result.message);
-        alert(`Login Failed: ${result.message}`);
+        // If account is not verified, send OTP (using sendOtp) and navigate to verify page
+        if (result.message && result.message.toLowerCase().includes("not verified")) {
+          try {
+            const resendResp = await fetch("/api/auth/sendOtp", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: data.email }),
+            });
+            const resendJson = await resendResp.json();
+            if (resendResp.ok) {
+              navigate("/verify-otp", { state: { email: data.email, otpExpires: resendJson.otpExpires } });
+            } else {
+              // fallback: navigate to verify page without otpExpires
+              navigate("/verify-otp", { state: { email: data.email } });
+            }
+          } catch (err) {
+            // if resend fails, still navigate to verify page so user can try again
+            navigate("/verify-otp", { state: { email: data.email } });
+          }
+        } else {
+          alert(`Login Failed: ${result.message}`);
+        }
       } else {
         console.log("Login Successful", result);
         const { user, token } = result;
