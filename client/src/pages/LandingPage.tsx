@@ -359,11 +359,14 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ListChecks, BookOpen, BrainCircuit } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 import logo from '../assets/logo2.svg';
 import image from '../assets/image.png';
 import habit from '../assets/habit.jpg';
 import quote from '../assets/quote.jpg';
+import meditation from "../assets/meditation.png"
 
 // --- Reusable Feature Card ---
 interface FeatureCardProps {
@@ -394,7 +397,7 @@ function LandingPage() {
   const quotesRef = useRef<HTMLElement | null>(null);
   const aboutRef = useRef<HTMLElement | null>(null);
 
-  const scrollToSection = (ref: React.RefObject<HTMLElement>) => {
+  const scrollToSection = (ref: React.RefObject<HTMLElement | null>) => {
     if (ref.current) ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
@@ -503,7 +506,7 @@ function LandingPage() {
             </ul>
           </div>
           <div className="flex justify-center order-1 md:order-2">
-            <img src="/images/meditation.png" alt="Meditation" className="rounded-2xl shadow-lg w-full max-w-md" />
+            <img src={meditation} alt="Meditation" className="rounded-2xl shadow-lg w-full max-w-md" />
           </div>
         </div>
       </section>
@@ -544,24 +547,24 @@ function LandingPage() {
               accessible to everyone, anytime, anywhere.
             </p>
           </div>
-          <div className="flex justify-center">
+          {/* <div className="flex justify-center">
             <img src="/images/about-us.png" alt="About Us" className="rounded-2xl shadow-lg w-full max-w-md" />
-          </div>
+          </div> */}
         </div>
       </section>
 
       {/* --- Footer --- */}
-      <footer className="bg-brand-100 text-white py-12">
+      <footer className="bg-brand-700 text-white py-12">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 px-4 sm:px-8">
           <div>
             <h3 className="text-xl font-bold mb-4">ManKoSathi</h3>
-            <p className="text-brand-500">
+            <p className="text-brand-200">
               Your daily companion for building habits, practicing mindfulness, and finding peace.
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-4">Quick Links</h4>
-            <ul className="space-y-2 text-brand-500">
+            <ul className="space-y-2 text-brand-200">
               <li className="hover:text-white cursor-pointer" onClick={() => scrollToSection(habitsRef)}>Habits</li>
               <li className="hover:text-white cursor-pointer" onClick={() => scrollToSection(meditationRef)}>Meditation</li>
               <li className="hover:text-white cursor-pointer" onClick={() => scrollToSection(quotesRef)}>Quotes</li>
@@ -570,7 +573,7 @@ function LandingPage() {
           </div>
           <div>
             <h4 className="font-semibold mb-4">Resources</h4>
-            <ul className="space-y-2 text-brand-500">
+            <ul className="space-y-2 text-brand-200">
               <li className="hover:text-white cursor-pointer">Blog</li>
               <li className="hover:text-white cursor-pointer">Community</li>
               <li className="hover:text-white cursor-pointer">Support</li>
@@ -578,15 +581,15 @@ function LandingPage() {
           </div>
           <div>
             <h4 className="font-semibold mb-4">Stay Connected</h4>
-            <p className="text-brand-300">Follow us on social media for daily inspiration.</p>
+            <p className="text-brand-200">Follow us on social media for daily inspiration.</p>
             <div className="flex gap-4 mt-4">
-              <span className="w-8 h-8 bg-brand-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600">f</span>
-              <span className="w-8 h-8 bg-brand-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600">t</span>
-              <span className="w-8 h-8 bg-brand-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600">i</span>
+              <span className="w-8 h-8 bg-brand-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600"><FontAwesomeIcon icon={faInstagram} /></span>
+              <span className="w-8 h-8 bg-brand-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600"><FontAwesomeIcon icon={faFacebook} /></span>
+              <span className="w-8 h-8 bg-brand-700 rounded-full flex items-center justify-center cursor-pointer hover:bg-brand-600"><FontAwesomeIcon icon={faTwitter} /></span>
             </div>
           </div>
         </div>
-        <div className="text-center text-brand-400 mt-8">
+        <div className="text-center text-brand-200 mt-8">
           © 2025 ManKoSathi. All rights reserved.
         </div>
       </footer>
